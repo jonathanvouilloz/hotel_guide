@@ -58,12 +58,17 @@ function getEventCTAUrl(event: HotelEvent): string | null {
       {amenities.length > 0 ? (
         <div class="space-y-3">
           {amenities.map((amenity: Amenity) => (
-            <a
-              href={`#${amenity.id}`}
-              id={amenity.id}
-              class="block card p-4 hover:bg-(--color-surface-hover) transition-colors"
-            >
+            <div class="card p-4">
+              <!-- Top row: content + image -->
               <div class="flex gap-4">
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-(--color-text)">{amenity.name}</h3>
+                  {amenity.description && (
+                    <p class="text-sm text-(--color-text-secondary) mt-1 line-clamp-2">
+                      {amenity.description}
+                    </p>
+                  )}
+                </div>
                 {amenity.image && (
                   <img
                     src={amenity.image}
@@ -71,41 +76,23 @@ function getEventCTAUrl(event: HotelEvent): string | null {
                     class="w-20 h-20 rounded-lg object-cover shrink-0"
                   />
                 )}
-                <div class="flex-1 min-w-0">
-                  <h3 class="font-semibold text-(--color-text) truncate">{amenity.name}</h3>
-                  {amenity.amenityType && (
-                    <span class="text-xs text-(--color-text-muted) uppercase tracking-wide">
-                      {amenity.amenityType}
-                    </span>
-                  )}
-                  {amenity.description && (
-                    <p class="text-sm text-(--color-text-secondary) mt-1 line-clamp-2">
-                      {amenity.description}
-                    </p>
-                  )}
-                  <div class="flex flex-wrap gap-2 mt-2 text-xs text-(--color-text-muted)">
-                    {amenity.hours && (
-                      <span class="flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm">schedule</span>
-                        {amenity.hours}
-                      </span>
-                    )}
-                    {amenity.price && (
-                      <span class="flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm">payments</span>
-                        {amenity.price}
-                      </span>
-                    )}
-                    {amenity.location && (
-                      <span class="flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm">location_on</span>
-                        {amenity.location}
-                      </span>
-                    )}
-                  </div>
-                </div>
               </div>
-            </a>
+              <!-- Bottom row: price + details (full width) -->
+              <div class="flex items-center justify-between mt-3">
+                {amenity.price ? (
+                  <span class="text-sm font-medium text-(--color-primary)">
+                    {amenity.price}
+                  </span>
+                ) : <span></span>}
+                <a
+                  href={`/services/${amenity.id}`}
+                  class="inline-flex items-center gap-1 text-sm font-medium text-(--color-primary) hover:underline"
+                >
+                  See details
+                  <span class="material-symbols-outlined text-base">arrow_forward</span>
+                </a>
+              </div>
+            </div>
           ))}
         </div>
       ) : (

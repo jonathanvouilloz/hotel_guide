@@ -84,6 +84,7 @@ export interface CategoryImages {
 export interface TinaSettings {
   hostelName: string;
   logo?: string;
+  theme?: ThemeMode;
   branding?: {
     primaryColor?: string;
     accentColor?: string;

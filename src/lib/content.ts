@@ -71,6 +71,7 @@ export async function getSettings(): Promise<Settings> {
   cachedSettings = {
     hostelName: data.hostelName,
     logo: data.logo || '/images/logo.png',
+    theme: data.theme,
     primaryColor: data.branding?.primaryColor,
     accentColor: data.branding?.accentColor,
     wifi: {

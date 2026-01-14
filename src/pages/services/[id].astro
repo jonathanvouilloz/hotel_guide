@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import { getAmenities } from '../../lib/content';
+import type { Amenity } from '../../lib/types';
+
+export async function getStaticPaths() {
+  const amenities = await getAmenities();
+
+  return amenities.map((amenity) => ({
+    params: { id: amenity.id },
+    props: { amenity },
+  }));
+}
+
+interface Props {
+  amenity: Amenity;
+}
+
+const { amenity } = Astro.props;
+---
+
+<BaseLayout title={amenity.name} description={amenity.description} showNav={false}>
+  <Header
+    title={amenity.name}
+    showBack
+    backHref="/services"
+    transparent
+  />
+
+  <div class="service-detail pb-8">
+    <!-- Hero Image -->
+    <div class="relative h-64 w-full -mt-16">
+      <!-- Gradient overlay at top for header readability -->
+      <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/70 to-transparent z-10 pointer-events-none"></div>
+
+      {amenity.image ? (
+        <div
+          class="absolute inset-0 bg-cover bg-center"
+          style={`background-image: linear-gradient(to bottom, transparent 0%, var(--color-bg) 100%), url("${amenity.image}");`}
+        ></div>
+      ) : (
+        <div class="absolute inset-0 bg-(--color-surface-input) flex items-center justify-center">
+          <span class="material-symbols-outlined text-[64px] text-(--color-text-secondary)/30">spa</span>
+        </div>
+      )}
+    </div>
+
+    <!-- Content -->
+    <div class="px-4 pt-4 space-y-5">
+      <!-- Header -->
+      <header>
+        {amenity.amenityType && (
+          <span class="inline-block text-xs font-medium text-(--color-primary) uppercase tracking-wide mb-2">
+            {amenity.amenityType}
+          </span>
+        )}
+        <h1 class="text-2xl font-bold text-(--color-text)">{amenity.name}</h1>
+      </header>
+
+      <!-- Meta info (vertical list) -->
+      {(amenity.hours || amenity.price || amenity.location) && (
+        <div class="space-y-3">
+          {amenity.hours && (
+            <div class="flex items-center gap-3">
+              <div class="flex size-10 items-center justify-center rounded-full bg-(--color-primary)/10 text-(--color-primary)">
+                <span class="material-symbols-outlined">schedule</span>
+              </div>
+              <div>
+                <p class="text-sm text-(--color-text-muted)">Hours</p>
+                <p class="font-medium text-(--color-text)">{amenity.hours}</p>
+              </div>
+            </div>
+          )}
+
+          {amenity.price && (
+            <div class="flex items-center gap-3">
+              <div class="flex size-10 items-center justify-center rounded-full bg-(--color-primary)/10 text-(--color-primary)">
+                <span class="material-symbols-outlined">payments</span>
+              </div>
+              <div>
+                <p class="text-sm text-(--color-text-muted)">Price</p>
+                <p class="font-medium text-(--color-text)">{amenity.price}</p>
+              </div>
+            </div>
+          )}
+
+          {amenity.location && (
+            <div class="flex items-center gap-3">
+              <div class="flex size-10 items-center justify-center rounded-full bg-(--color-primary)/10 text-(--color-primary)">
+                <span class="material-symbols-outlined">location_on</span>
+              </div>
+              <div>
+                <p class="text-sm text-(--color-text-muted)">Location</p>
+                <p class="font-medium text-(--color-text)">{amenity.location}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      <!-- Divider -->
+      <div class="h-px w-full bg-(--color-border-light)"></div>
+
+      <!-- Description -->
+      {amenity.description && (
+        <p class="text-base leading-relaxed text-(--color-text-secondary)">
+          {amenity.description}
+        </p>
+      )}
+
+      <!-- Details (rich text) -->
+      {amenity.details && (
+        <div class="prose text-(--color-text-secondary)" set:html={amenity.details} />
+      )}
+
+      <!-- Tags -->
+      {amenity.tags && amenity.tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 pt-2">
+          {amenity.tags.map(tag => (
+            <span class="text-sm px-3 py-1 rounded-full bg-(--color-surface) text-(--color-primary)">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>
