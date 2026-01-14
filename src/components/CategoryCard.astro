@@ -1,0 +1,73 @@
+---
+/**
+ * CategoryCard - Explore grid card with image background
+ * Redesigned for BLACK theme
+ */
+interface Props {
+  icon: string;
+  label: string;
+  subtitle?: string;
+  href: string;
+  image?: string;
+  aspectRatio?: '4/5' | 'square';
+}
+
+const {
+  icon,
+  label,
+  subtitle,
+  href,
+  image,
+  aspectRatio = '4/5'
+} = Astro.props;
+
+const aspectClass = aspectRatio === 'square' ? 'aspect-square' : 'aspect-[4/5]';
+
+// Default gradient background if no image
+const bgStyle = image
+  ? `background-image: url("${image}");`
+  : 'background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-input) 100%);';
+---
+
+<a
+  href={href}
+  class:list={[
+    'category-card group relative overflow-hidden rounded-2xl bg-gray-800 cursor-pointer',
+    aspectClass
+  ]}
+>
+  <!-- Background Image -->
+  <div
+    class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+    style={bgStyle}
+  ></div>
+
+  <!-- Gradient Overlay -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 via-40% to-transparent"></div>
+
+  <!-- Content -->
+  <div class="absolute bottom-0 left-0 p-4">
+    <!-- Icon Circle -->
+    <div class="mb-2 flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white">
+      <span class="material-symbols-outlined" style="font-size: 16px;">{icon}</span>
+    </div>
+
+    <!-- Label -->
+    <p class="text-base font-bold text-white leading-tight">{label}</p>
+
+    <!-- Subtitle -->
+    {subtitle && (
+      <p class="text-xs text-gray-300 mt-1">{subtitle}</p>
+    )}
+  </div>
+</a>
+
+<style>
+  .category-card {
+    text-decoration: none;
+  }
+
+  .category-card:active {
+    transform: scale(0.98);
+  }
+</style>

@@ -1,0 +1,70 @@
+---
+/**
+ * Header component - App bar with optional back button and actions
+ */
+interface Props {
+  title?: string;
+  showBack?: boolean;
+  backHref?: string;
+  rightIcon?: string;
+  rightHref?: string;
+  transparent?: boolean;
+}
+
+const {
+  title,
+  showBack = false,
+  backHref = 'javascript:history.back()',
+  rightIcon,
+  rightHref,
+  transparent = false
+} = Astro.props;
+
+// Text color: white on transparent (overlay), theme color otherwise
+const textColorClass = transparent ? 'text-white' : 'text-(--color-text)';
+
+const headerClasses = transparent
+  ? 'bg-transparent backdrop-blur-sm'
+  : 'bg-(--color-bg)/95 backdrop-blur-md border-b border-white/10';
+---
+
+<header class:list={['sticky top-0 z-40 w-full transition-colors', headerClasses]}>
+  <div class="flex items-center justify-between p-4 h-16">
+    <!-- Left: Back button or spacer -->
+    <div class="w-10 flex items-center justify-start">
+      {showBack ? (
+        <a
+          href={backHref}
+          class:list={['flex size-10 items-center justify-center rounded-full hover:bg-white/10 transition-colors touch-target', textColorClass]}
+          aria-label="Go back"
+        >
+          <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+      ) : (
+        <span class="size-10" aria-hidden="true"></span>
+      )}
+    </div>
+
+    <!-- Center: Title -->
+    {title && (
+      <h1 class:list={['text-lg font-bold leading-tight tracking-tight flex-1 text-center truncate px-2', textColorClass]}>
+        {title}
+      </h1>
+    )}
+
+    <!-- Right: Action button or spacer -->
+    <div class="w-10 flex items-center justify-end">
+      {rightIcon ? (
+        <a
+          href={rightHref || '#'}
+          class="flex size-10 items-center justify-center rounded-full bg-(--color-surface-input) text-(--color-primary) hover:bg-(--color-surface) transition-colors touch-target"
+          aria-label="Action"
+        >
+          <span class="material-symbols-outlined">{rightIcon}</span>
+        </a>
+      ) : (
+        <span class="size-10" aria-hidden="true"></span>
+      )}
+    </div>
+  </div>
+</header>

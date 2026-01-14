@@ -1,0 +1,98 @@
+---
+/**
+ * SpotCard - Restaurant/Bar/Service listing card
+ * Redesigned with OPEN/CLOSED badge and distance overlay
+ */
+import type { Spot, SpotCategory } from '../lib/types';
+import { isOpen } from '../lib/openingHours';
+
+interface Props {
+  spot: Spot;
+  category: SpotCategory;
+}
+
+const { spot, category } = Astro.props;
+
+// Check if spot is currently open
+const openStatus = isOpen(spot.openingHours);
+
+// Get coordinates for distance calculation (client-side)
+const coords = spot.coordinates || spot.location;
+---
+
+<a href={`/${category}/${spot.id}`} class="spot-card group" data-cuisine={spot.cuisineType || ''} data-bar-type={spot.barType || ''}>
+  <article class="relative flex flex-col overflow-hidden rounded-xl bg-(--color-surface-subtle) transition-transform active:scale-[0.99]">
+    <!-- Closed overlay (full card) -->
+    {openStatus === false && (
+      <div class="absolute inset-0 bg-black/70 z-10 flex items-center justify-center rounded-xl">
+        <span class="text-white text-lg font-bold uppercase tracking-wide">Closed</span>
+      </div>
+    )}
+    <!-- Image -->
+    <div class="relative w-full h-44 overflow-hidden">
+      {spot.image ? (
+        <div
+          class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+          style={`background-image: url("${spot.image}");`}
+        ></div>
+      ) : (
+        <div class="absolute inset-0 bg-(--color-surface-input) flex items-center justify-center">
+          <span class="material-symbols-outlined text-[48px] text-(--color-text-secondary)/30">restaurant</span>
+        </div>
+      )}
+
+      <!-- Gradient overlay bottom (for distance badge visibility) -->
+      <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent"></div>
+
+      <!-- Distance Badge (populated by client-side JS) -->
+      {coords && (
+        <div
+          class="distance-badge absolute bottom-3 right-3 rounded-lg bg-black/60 backdrop-blur-sm px-2.5 py-1 hidden"
+          data-lat={coords.lat}
+          data-lng={coords.lng}
+        >
+          <span class="text-xs font-bold text-white distance-value"></span>
+        </div>
+      )}
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-col gap-1.5 p-4">
+      <!-- Title -->
+      <h3 class="text-base font-bold text-(--color-text) leading-tight">{spot.name}</h3>
+
+      <!-- Description/Tagline -->
+      {(spot.tagline || spot.description) && (
+        <p class="text-sm text-primary line-clamp-1">
+          {spot.tagline || spot.description}
+        </p>
+      )}
+
+      <!-- Separator -->
+      <div class="h-px w-full bg-(--color-separator) my-2"></div>
+
+      <!-- Footer Row -->
+      <div class="flex items-center justify-between text-sm">
+        <div class="flex items-center gap-2 text-(--color-text-secondary)">
+          {spot.priceRange && (
+            <span class="font-semibold text-(--color-text)">{spot.priceRange}</span>
+          )}
+          {coords && (
+            <span class="distance-text location-trigger flex items-center gap-1 cursor-pointer text-primary hover:underline">
+              <span class="material-symbols-outlined" style="font-size: 14px;">near_me</span>
+              <span class="distance-value-text">Activer localisation</span>
+            </span>
+          )}
+        </div>
+        <span class="text-sm font-bold text-primary">Details</span>
+      </div>
+    </div>
+  </article>
+</a>
+
+<style>
+  .spot-card {
+    text-decoration: none;
+    display: block;
+  }
+</style>

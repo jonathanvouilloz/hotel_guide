@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hostel Home Dashboard</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13c8ec",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101f22",
+                        "card-dark": "#192f33",
+                        "surface-dark": "#1e2d30",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem", 
+                        "lg": "1rem", 
+                        "xl": "1.5rem", 
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 1,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+        /* Custom scrollbar hiding for cleaner mobile look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white min-h-screen pb-24 overflow-x-hidden selection:bg-primary selection:text-background-dark">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-40 w-full backdrop-blur-md bg-background-light/90 dark:bg-background-dark/90 border-b border-gray-200 dark:border-white/5">
+<div class="flex items-center justify-between p-4">
+<div class="flex items-center gap-3">
+<div class="relative group cursor-pointer">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 ring-2 ring-primary/20" data-alt="Profile picture of a smiling young traveler" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDcDY11yjG9ORa4UfFR4voFa5rnnjOIh31TdeNgedXjFr9iA0qKw8YJ-aWMnmcHqK3rcFP5jOOSC1jitJMxcOAHtQp_nYYETIOKNMP8uD7FbSGWRamxgxQwIFpvOSAh2Bkd3_rBTrA9kBA5thIto9ivT5jSbu3gEdL4yCrkDpIQl81pgDvTEajqmrpaXvyb3w1gG-cFR8g3YR2lnRb5bP8vjA0jLwMK4odyJDK4rlibtWStQbkASHGUTM4gHEH7r9oPY5SkXdFtVw");'>
+</div>
+<div class="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full border-2 border-background-dark"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-medium text-gray-500 dark:text-gray-400">Good Morning</span>
+<h2 class="text-base font-bold leading-tight">Alex</h2>
+</div>
+</div>
+<button class="flex items-center justify-center size-10 rounded-full bg-surface-dark/50 hover:bg-surface-dark text-white transition-colors relative">
+<span class="material-symbols-outlined text-[24px]">notifications</span>
+<span class="absolute top-2 right-2.5 size-2 bg-primary rounded-full animate-pulse"></span>
+</button>
+</div>
+</header>
+<!-- Hero Section -->
+<div class="relative w-full">
+<div class="relative w-full h-[320px] bg-cover bg-center" data-alt="Vibrant social common area of a modern youth hostel with people chatting" style='background-image: linear-gradient(to bottom, rgba(16, 31, 34, 0) 0%, rgba(16, 31, 34, 0.8) 90%, rgba(16, 31, 34, 1) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBtewK75B3iHI5ea_1zTzS5ppJhPOZ6PYXz53l65HiXz3VrDTp5vHOEehMykLjJ9hQsHTYhrLCv9uFBUIPrQLzaQDAmOLJOwGSpJDOMYTHSWOr-AwcmhVs7dTTnP7QtvO8NTUAhwqCEQY94b12dIJix3YDhdyAgylX_6PE2jaFkXW6GmFng8eAN3m3jUSI6ApGkUjs8teqpvNBEwZVVey5Q5LIn8s7bU6zfTbpWbfYGRjxGtxKpm6-kqkppW3Q4BDTwG1Nw4rQbXQ");'>
+<div class="absolute bottom-20 left-0 w-full px-4 flex flex-col items-start gap-1">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/20 mb-2">
+<span class="size-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="text-primary text-xs font-bold uppercase tracking-wider">Berlin Basecamp</span>
+</div>
+<h1 class="text-3xl font-black leading-tight tracking-tight text-white max-w-[80%]">
+                    Ready for today's adventure?
+                </h1>
+</div>
+</div>
+</div>
+<!-- Essential Info Card (Overlapping Hero) -->
+<div class="px-4 -mt-16 relative z-10">
+<div class="flex flex-col rounded-2xl bg-[#192f33] border border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.4)] overflow-hidden">
+<!-- Header of Card -->
+<div class="flex items-center justify-between p-4 pb-2 border-b border-white/5">
+<h3 class="text-white text-base font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">wifi</span>
+                    Essential Info
+                </h3>
+<span class="text-xs font-medium text-gray-400 bg-white/5 px-2 py-1 rounded-lg">Room 204</span>
+</div>
+<!-- Content of Card -->
+<div class="flex flex-row p-4 gap-4 items-stretch">
+<!-- Info Column -->
+<div class="flex-1 flex flex-col justify-between gap-4">
+<div class="space-y-3">
+<div>
+<p class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-0.5">Wi-Fi Network</p>
+<p class="text-white font-medium text-sm">Hostel_Guest_5G</p>
+</div>
+<div>
+<p class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-0.5">Password</p>
+<div class="flex items-center gap-2">
+<p class="text-primary font-bold text-lg tracking-wide">surf_berlin24</p>
+<button class="text-gray-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Checkout Column / Visual -->
+<div class="w-[100px] bg-surface-dark rounded-xl p-3 flex flex-col items-center justify-center gap-2 text-center border border-white/5">
+<span class="material-symbols-outlined text-orange-400 text-[28px]">schedule</span>
+<div>
+<p class="text-[10px] text-gray-400">Checkout</p>
+<p class="text-white font-bold text-base">11:00</p>
+<p class="text-[10px] text-gray-400">AM</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- "Happening Now" Ticker -->
+<div class="px-4 mt-6">
+<button class="w-full group relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-900 to-blue-900 p-[1px]">
+<div class="relative flex items-center justify-between gap-3 rounded-[11px] bg-background-dark/90 px-4 py-3 transition-colors group-hover:bg-background-dark/80">
+<div class="flex items-center gap-3 overflow-hidden">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-purple-500/20 text-purple-400">
+<span class="material-symbols-outlined">local_bar</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="text-xs font-bold text-purple-400 uppercase tracking-wider">Happening Tonight</span>
+<span class="truncate text-sm font-medium text-white">Pub Crawl starts in 2 hours!</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-400 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</button>
+</div>
+<!-- Explore Grid -->
+<div class="flex flex-col gap-4 p-4 mt-2">
+<div class="flex items-center justify-between">
+<h2 class="text-xl font-bold text-white tracking-tight">Explore</h2>
+<button class="text-xs font-bold text-primary hover:text-primary/80">View All</button>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<!-- Food & Drink -->
+<div class="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-gray-800 cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Delicious gourmet burger and craft cocktail on a wooden table" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDhEVTDvs11iL_S_DGFfKxzZfKDrUYBCpMfcg4kX4GER75b4BGh3yBvwQ_-x-W6-mRV2mFACP_gjmAZZvu3cOvCOgEsWZGMIGK7QdFL5oKQFbMbi1SyeULfZ5rtpeHMHmdfQpRjUTpTN8zEL2yAvbpuvJl7cmHcqr56BtZHrUatohne_k1UfyiCDvb8uv2T6vWSm62r6OHOqqEmeGxQt-G-MIyT0d586_lMITJBWDgOX6c-jbrkkbhXqGMHKUzN0Vce3USWxoSqng");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4">
+<div class="mb-1 flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white">
+<span class="material-symbols-outlined text-[18px]">restaurant</span>
+</div>
+<p class="text-base font-bold text-white leading-tight">Food &amp; Drink</p>
+<p class="text-xs text-gray-300 mt-1">Best local eats</p>
+</div>
+</div>
+<!-- Activities -->
+<div class="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-gray-800 cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Group of friends hiking near a lake with mountains in background" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB1wH2z0w8rdp-ySHE3ZVSyVg6U7QYHf4ByOUtXw3nKwmDPGW_nteVrma12dnOQqDOytTCH12fcm7FwhArIAGm2xg4FmDDMOL-VgMEqpigLUtPAufbedjoDGGDbPd3fzGlKYkn_RE8v3vjH67aXvLT4hZkGFCRmtKS9mOOFkzS891J5TNM1I0X-M5g31g1jQQHb2o0VAn0R83BzMf9xY-hLI-ZqA2mNlehPh121vq8gYnvDHfabkZ3YoEDEl09pMekpaqpikCvjtA");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4">
+<div class="mb-1 flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white">
+<span class="material-symbols-outlined text-[18px]">hiking</span>
+</div>
+<p class="text-base font-bold text-white leading-tight">Activities</p>
+<p class="text-xs text-gray-300 mt-1">Daily tours</p>
+</div>
+</div>
+<!-- Services -->
+<div class="group relative aspect-square overflow-hidden rounded-2xl bg-gray-800 cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Modern clean laundry room with washing machines" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAA2LJWsnNXLcFH98_ka9LfNhxAhj3WZ4aDq1pQANyHdxOtwdB6zIMBiVg1zMN9jLbUOGDYgTC7-Um8dqxNhp6f5ise2JrNIVpuNS8m3GDRlz0PzZl7utHXeeJtIT_byC-dvBUZ97cwe3oVYSHOoWe9a3vnwf8ko-8-tqS6d8OyfDnz1dnlIYtAawMMCO1gBJOCNYjPWVu60ZKM8U44J03OF33bZXgaGNUmf90FfigJz2sMOJ1mEjDrCeigyAznlY6TIyHjqUX00g");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4">
+<div class="mb-1 flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white">
+<span class="material-symbols-outlined text-[18px]">local_laundry_service</span>
+</div>
+<p class="text-base font-bold text-white leading-tight">Services</p>
+</div>
+</div>
+<!-- City Map -->
+<div class="group relative aspect-square overflow-hidden rounded-2xl bg-gray-800 cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Abstract colorful map view of city streets" data-location="Berlin" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDVGJ65hbQw7q965uLUHcW5NCTNonSkGTfElQzz5FaD662MRcud_k7IRlRE5gVePYsLi37ukI797_WaZg0G2OWY82rb_uaJKLwKbJik6uYCKolU3YaMGBxfXbWPW14nYs3FNRRqRJiqRlPfb4ewkzrvu4nLznpr36YQv2QW5jUXRybBAkZq3PIJ9mrV-ku8wlZAP-UCdvMfdNRte1ErH9osfvjhQZ_77zaMCz5oQud8gRcc-5hqEaSIeRtbJ-Ny1pbfJg_8nu_Z5g");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4">
+<div class="mb-1 flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white">
+<span class="material-symbols-outlined text-[18px]">map</span>
+</div>
+<p class="text-base font-bold text-white leading-tight">City Map</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 w-full bg-[#111f22]/90 backdrop-blur-lg border-t border-white/5 pb-5 pt-2 z-50">
+<div class="flex justify-around items-center px-2">
+<button class="flex flex-col items-center gap-1 p-2 text-primary w-16">
+<span class="material-symbols-outlined filled">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-gray-300 transition-colors w-16">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-[10px] font-medium">Chat</span>
+</button>
+<button class="flex items-center justify-center -mt-8 size-14 bg-primary rounded-full shadow-[0_0_15px_rgba(19,200,236,0.4)] text-background-dark border-4 border-background-dark">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-gray-300 transition-colors w-16">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="text-[10px] font-medium">Bookings</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-gray-300 transition-colors w-16">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</div>
+</nav>
+<!-- Inline Style for Filled Icons in Nav -->
+<style>
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</body></html>

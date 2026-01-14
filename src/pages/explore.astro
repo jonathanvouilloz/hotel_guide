@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import CategoryCard from '../components/CategoryCard.astro';
+
+// Category images - replace with actual images
+const categoryImages = {
+  restaurants: '/images/category-food.jpg',
+  bars: '/images/category-bars.jpg',
+  activities: '/images/category-activities.jpg',
+  services: '/images/category-services.jpg',
+  transport: '/images/category-transport.jpg',
+};
+
+// Categories data
+const categories = [
+  {
+    icon: 'restaurant',
+    label: 'Restaurants',
+    subtitle: 'Local food spots',
+    href: '/restaurants',
+    image: categoryImages.restaurants,
+  },
+  {
+    icon: 'local_bar',
+    label: 'Bars & Nightlife',
+    subtitle: 'Best places to party',
+    href: '/bars',
+    image: categoryImages.bars,
+  },
+  {
+    icon: 'hiking',
+    label: 'Activities',
+    subtitle: 'Tours & adventures',
+    href: '/activities',
+    image: categoryImages.activities,
+  },
+  {
+    icon: 'local_laundry_service',
+    label: 'Services',
+    subtitle: 'Useful services nearby',
+    href: '/services',
+    image: categoryImages.services,
+  },
+  {
+    icon: 'directions_bus',
+    label: 'Transport',
+    subtitle: 'Getting around',
+    href: '/transport',
+    image: categoryImages.transport,
+  },
+];
+---
+
+<BaseLayout title="Explore">
+  <Header title="Explore" showBack backHref="/" />
+
+  <div class="p-4">
+    <!-- Hero Text -->
+    <div class="py-2 mb-4">
+      <h2 class="text-2xl font-extrabold text-(--color-text) leading-tight">
+        Discover
+        <br />
+        <span class="text-(--color-text-secondary) font-medium text-lg">
+          Everything you need nearby
+        </span>
+      </h2>
+    </div>
+
+    <!-- Categories Grid -->
+    <nav class="grid grid-cols-2 gap-3" aria-label="Explore categories">
+      {categories.map((category, index) => (
+        <CategoryCard
+          icon={category.icon}
+          label={category.label}
+          subtitle={category.subtitle}
+          href={category.href}
+          image={category.image}
+          aspectRatio={index < 2 ? '4/5' : 'square'}
+        />
+      ))}
+    </nav>
+  </div>
+</BaseLayout>

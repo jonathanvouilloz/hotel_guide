@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Local Food &amp; Bars Guide</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13c8ec",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101f22",
+                        "surface-dark": "#192f33",
+                        "surface-input": "#234248",
+                        "text-secondary": "#92c0c9",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white antialiased selection:bg-primary selection:text-surface-dark">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden pb-24">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-20 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md px-4 py-4 transition-colors">
+<div class="flex items-center justify-between">
+<button class="flex size-10 items-center justify-center rounded-full active:bg-surface-dark transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-white" style="font-size: 24px;">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center">Eat &amp; Drink</h1>
+<button class="flex size-10 items-center justify-center rounded-full bg-surface-input text-white active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary" style="font-size: 24px;">map</span>
+</button>
+</div>
+</header>
+<!-- Search Bar -->
+<div class="px-4 pb-2">
+<div class="flex w-full items-center rounded-xl bg-gray-200 dark:bg-surface-input h-12 overflow-hidden focus-within:ring-2 focus-within:ring-primary/50 transition-all">
+<div class="flex items-center justify-center pl-4 text-gray-500 dark:text-text-secondary">
+<span class="material-symbols-outlined" style="font-size: 24px;">search</span>
+</div>
+<input class="flex h-full w-full flex-1 border-none bg-transparent px-3 text-base font-medium text-slate-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-text-secondary focus:ring-0 focus:outline-none" placeholder="Search for tacos, beer, coffee..." type="text"/>
+</div>
+</div>
+<!-- Filter Chips -->
+<div class="sticky top-[72px] z-10 w-full overflow-x-auto no-scrollbar bg-background-light dark:bg-background-dark py-3 pl-4">
+<div class="flex gap-3 pr-4">
+<button class="flex h-9 shrink-0 items-center justify-center rounded-xl bg-primary px-5 shadow-[0_0_10px_rgba(19,200,236,0.3)] transition-transform active:scale-95">
+<span class="text-surface-dark text-sm font-bold">All</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center rounded-xl bg-gray-200 dark:bg-surface-input px-5 transition-transform active:scale-95">
+<span class="text-slate-700 dark:text-white text-sm font-medium">Cheap Eats</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center rounded-xl bg-gray-200 dark:bg-surface-input px-5 transition-transform active:scale-95">
+<span class="text-slate-700 dark:text-white text-sm font-medium">Nightlife</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center rounded-xl bg-gray-200 dark:bg-surface-input px-5 transition-transform active:scale-95">
+<span class="text-slate-700 dark:text-white text-sm font-medium">Vegetarian</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center rounded-xl bg-gray-200 dark:bg-surface-input px-5 transition-transform active:scale-95">
+<span class="text-slate-700 dark:text-white text-sm font-medium">Coffee</span>
+</button>
+</div>
+</div>
+<!-- List Content -->
+<main class="flex flex-col gap-5 px-4 pt-2">
+<!-- Hero Text -->
+<div class="py-2">
+<h2 class="text-2xl font-extrabold text-slate-900 dark:text-white leading-tight">Hungry?<br/><span class="text-gray-500 dark:text-text-secondary font-medium text-lg">Here's where the locals go.</span></h2>
+</div>
+<!-- Card 1: Staff Pick -->
+<div class="@container">
+<div class="group relative flex flex-col overflow-hidden rounded-2xl bg-white dark:bg-surface-dark shadow-lg dark:shadow-none transition-transform active:scale-[0.99]">
+<!-- Image -->
+<div class="relative h-48 w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Steaming bowl of spicy asian noodle soup" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBIsh9dADg-9-wxog5g8Z4Ff9PlMWnTteQA7IVEGBNtD56pgfiq3Q--k-RcSMO2K3nOQCRWf9fAw4wlP5cXhBQMUkix3UqlQXYhuHXssrmoQDq0tIN9ymS2y6A_jEySr6IEb4WMX-ZWPgn5hwGi7-IW4-tXVzorZVBP54iTXKe5cgUZm0YGPAIPGfwybUMrhexy7nRw34hSDlBqKBC1TgwwAmNzUJ_XsCeWVSSzYkKeZ3LzJfyR2_FDx6qjcJ63feOPquppF1FK7Q");'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-dark/90 to-transparent opacity-60"></div>
+<!-- Staff Pick Badge -->
+<div class="absolute left-4 top-4 flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 shadow-lg">
+<span class="material-symbols-outlined text-surface-dark" style="font-size: 16px;">verified</span>
+<span class="text-xs font-bold text-surface-dark tracking-wide uppercase">Staff Pick</span>
+</div>
+</div>
+<!-- Content -->
+<div class="flex flex-col gap-3 p-4">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white leading-tight">Mama's Noodle House</h3>
+<p class="text-sm font-medium text-primary mt-1">Spiciest soup in town 🌶️</p>
+</div>
+<div class="flex h-8 items-center justify-center rounded-lg bg-background-light dark:bg-surface-input px-2.5">
+<span class="text-xs font-bold text-slate-900 dark:text-white">4.8</span>
+<span class="material-symbols-outlined ml-1 text-yellow-400 fill-1" style="font-size: 14px; font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<div class="h-px w-full bg-gray-100 dark:bg-white/10"></div>
+<div class="flex items-center justify-between text-sm text-gray-500 dark:text-text-secondary">
+<div class="flex items-center gap-3">
+<span class="font-semibold text-slate-700 dark:text-white">$$</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 16px;">directions_walk</span>
+                                    200m walk
+                                </span>
+</div>
+<button class="text-sm font-bold text-primary hover:underline">Details</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="@container">
+<div class="group relative flex flex-col overflow-hidden rounded-2xl bg-white dark:bg-surface-dark shadow-sm transition-transform active:scale-[0.99]">
+<div class="relative h-40 w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Cozy interior of a dimly lit craft beer bar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDkHDlidWm8X-57ivvKNsoD19sAm8SSXZYJq2xbiCZozU_qKWyVnl97p6tgq-n-2ykID6F3w3oO_8p2viDYV60u7yo8W9qagj0BP2MQzXG6tX85T_Zfj6mipe17-Npe15jRSpfAO0X_H6e79YGxXzh9zDg2EVoFrwImBbcfAoGsdYYr_kK5Q17_BygI2PtwtMhMCACh5BRjo12eVUk3h-zdlKhOUzT6ZMxsSSwzDvGgPYihgOYZn9_DQbKCZCtsj-_wub7zKfWcxA");'></div>
+<!-- Distance Badge -->
+<div class="absolute bottom-3 right-3 rounded-lg bg-black/60 backdrop-blur-sm px-2.5 py-1">
+<span class="text-xs font-bold text-white">1.2km</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-4">
+<div class="flex justify-between items-start">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">The Rusty Tap</h3>
+<span class="font-semibold text-slate-700 dark:text-text-secondary">$$$</span>
+</div>
+<p class="text-sm text-gray-500 dark:text-text-secondary line-clamp-1">Great spot for meeting other travelers.</p>
+<!-- Tags -->
+<div class="mt-2 flex gap-2">
+<span class="rounded-md bg-purple-500/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-purple-300">Nightlife</span>
+<span class="rounded-md bg-orange-500/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-300">Beer</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="@container">
+<div class="group relative flex flex-col overflow-hidden rounded-2xl bg-white dark:bg-surface-dark shadow-sm transition-transform active:scale-[0.99]">
+<div class="relative h-40 w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Fresh healthy green salad bowl with avocado" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDe2SF7VRPJ5nFBLLx-4VWAMu0ZCdB22UcSvMCsDBpR_8FTLdUrSZfrUA9fDgDkBJSf6nj6cyTtmzc0nxJCCuCZc_C9RKmU6E7uMuA6PSSZUlr2Ul1lIqAegO2zUR-zMVZNESMYibLePjwGH1KiJWp454cZhXQP9EBQbcScADfc7pwz3xDArz5OIhDYvLM11-DoloyNeTvjM6oPDI9mDIJdMOYYOq8oS75sHo0jRUAha2r-EQEl0u1BDwFK_V5O2Ms_erMhWJkqfQ");'></div>
+<!-- Discount Badge -->
+<div class="absolute left-0 top-4 rounded-r-lg bg-[#FF4757] px-3 py-1 shadow-md">
+<span class="text-xs font-bold text-white">Hostel Deal: -10%</span>
+</div>
+<div class="absolute bottom-3 right-3 rounded-lg bg-black/60 backdrop-blur-sm px-2.5 py-1">
+<span class="text-xs font-bold text-white">0.5km</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-4">
+<div class="flex justify-between items-start">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Green Earth Cafe</h3>
+<span class="font-semibold text-slate-700 dark:text-text-secondary">$$</span>
+</div>
+<p class="text-sm text-gray-500 dark:text-text-secondary line-clamp-1">Organic, vegan friendly &amp; chill vibes.</p>
+<!-- Tags -->
+<div class="mt-2 flex gap-2">
+<span class="rounded-md bg-green-500/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-green-300">Vegetarian</span>
+<span class="rounded-md bg-blue-500/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-300">Chill</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Helper Text -->
+<div class="py-6 text-center">
+<p class="text-sm text-gray-400 dark:text-text-secondary">Showing top recommendations near you.</p>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-4 z-30 flex size-14 items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/30 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-surface-dark" style="font-size: 28px;">chat_bubble</span>
+</button>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 z-40 w-full border-t border-gray-200 dark:border-white/5 bg-background-light dark:bg-background-dark pb-6 pt-3">
+<div class="flex justify-around items-center">
+<a class="flex flex-col items-center gap-1 text-gray-400 dark:text-gray-500" href="#">
+<span class="material-symbols-outlined" style="font-size: 24px;">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1" style="font-size: 24px; font-variation-settings: 'FILL' 1;">explore</span>
+<span class="text-[10px] font-bold">Guide</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gray-400 dark:text-gray-500" href="#">
+<span class="material-symbols-outlined" style="font-size: 24px;">calendar_month</span>
+<span class="text-[10px] font-medium">Events</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gray-400 dark:text-gray-500" href="#">
+<span class="material-symbols-outlined" style="font-size: 24px;">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

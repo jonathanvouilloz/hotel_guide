@@ -1,0 +1,265 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import { getAllSpots } from '../../lib/content';
+import { getDirectionsUrl } from '../../lib/deeplinks';
+import { getFormattedHours, getTodayHours, isOpen } from '../../lib/openingHours';
+import type { Spot, SpotCategory } from '../../lib/types';
+
+export async function getStaticPaths() {
+  const allSpots = await getAllSpots();
+  const paths: { params: { category: string; id: string }; props: { spot: Spot; category: SpotCategory } }[] = [];
+
+  for (const [category, spots] of Object.entries(allSpots)) {
+    for (const spot of spots) {
+      paths.push({
+        params: { category, id: spot.id },
+        props: { spot, category: category as SpotCategory },
+      });
+    }
+  }
+
+  return paths;
+}
+
+interface Props {
+  spot: Spot;
+  category: SpotCategory;
+}
+
+const { spot, category } = Astro.props;
+
+// Support both coordinates and location (PagesCMS compatibility)
+const coords = spot.coordinates || spot.location;
+const directionsUrl = coords ? getDirectionsUrl(coords.lat, coords.lng) : null;
+
+// Opening hours
+const formattedHours = getFormattedHours(spot.openingHours);
+const todayHours = getTodayHours(spot.openingHours);
+const openStatus = isOpen(spot.openingHours);
+
+function capitalize(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1).replace('-', ' ');
+}
+---
+
+<BaseLayout title={spot.name} description={spot.description} showNav={false}>
+  <Header
+    title={spot.name}
+    showBack
+    backHref={`/${category}`}
+    transparent
+  />
+
+  <div class="spot-detail pb-20">
+    <!-- Hero Image -->
+    <div class="relative h-64 w-full -mt-16">
+      <!-- Gradient overlay at top for header readability -->
+      <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/70 to-transparent z-10 pointer-events-none"></div>
+
+      {spot.image ? (
+        <div
+          class="absolute inset-0 bg-cover bg-center"
+          style={`background-image: linear-gradient(to bottom, transparent 0%, rgba(16, 31, 34, 0.6) 70%, rgba(16, 31, 34, 1) 100%), url("${spot.image}");`}
+        ></div>
+      ) : (
+        <div class="absolute inset-0 bg-(--color-surface-input) flex items-center justify-center">
+          <span class="material-symbols-outlined text-[64px] text-(--color-text-secondary)/30">image</span>
+        </div>
+      )}
+    </div>
+
+    <!-- Content -->
+    <div class="px-4 pt-4 space-y-5">
+      <!-- Header -->
+      <header>
+        <h1 class="text-2xl font-bold text-(--color-text)">{spot.name}</h1>
+
+        <!-- Meta row: cuisine, price, distance -->
+        <div class="flex items-center gap-2 mt-2 text-sm text-primary font-medium">
+          {spot.cuisineType && (
+            <span>{capitalize(spot.cuisineType)}</span>
+          )}
+          {spot.cuisineType && spot.priceRange && (
+            <span>•</span>
+          )}
+          {spot.priceRange && (
+            <span>{spot.priceRange}</span>
+          )}
+          {coords && (
+            <>
+              <span class="distance-separator">•</span>
+              <span
+                class="distance-display location-trigger cursor-pointer text-primary hover:underline"
+                data-lat={coords.lat}
+                data-lng={coords.lng}
+              >Activer localisation</span>
+            </>
+          )}
+        </div>
+      </header>
+
+      <!-- Divider -->
+      <div class="h-px w-full bg-white/10"></div>
+
+      <!-- Description -->
+      <p class="text-base leading-relaxed text-(--color-text-secondary)">
+        {spot.description}
+      </p>
+
+      <!-- Address Card -->
+      {spot.address && (
+        <div class="card p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex size-10 items-center justify-center rounded-full bg-(--color-primary)/10 text-(--color-primary)">
+              <span class="material-symbols-outlined">location_on</span>
+            </div>
+            <div class="flex-1">
+              <p class="font-bold text-(--color-text)">Address</p>
+              <p class="text-sm text-(--color-text-secondary) mt-1">{spot.address}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <!-- Opening Hours Card -->
+      {formattedHours.length > 0 && (
+        <div class="card p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex size-10 items-center justify-center rounded-full bg-(--color-primary)/10 text-(--color-primary)">
+              <span class="material-symbols-outlined">schedule</span>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <p class="font-bold text-(--color-text)">Opening Hours</p>
+                {openStatus !== null && (
+                  <span class={`text-xs font-bold px-2 py-0.5 rounded ${openStatus ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                    {openStatus ? 'OPEN' : 'CLOSED'}
+                  </span>
+                )}
+              </div>
+              {todayHours && (
+                <p class="text-sm text-primary font-medium mt-1">Today: {todayHours}</p>
+              )}
+              <div class="mt-3 space-y-1.5">
+                {formattedHours.map(({ day, hours, isToday }) => (
+                  <div class={`flex justify-between text-sm ${isToday ? 'text-(--color-text) font-medium' : 'text-(--color-text-secondary)'}`}>
+                    <span>{day}</span>
+                    <span class={hours.toLowerCase() === 'closed' ? 'text-red-400' : ''}>{hours}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <!-- Tags -->
+      {spot.tags && spot.tags.length > 0 && (
+        <div class="flex flex-wrap gap-2">
+          {spot.tags.map(tag => (
+            <span class="text-sm text-(--color-primary)">#{tag}</span>
+          ))}
+        </div>
+      )}
+    </div>
+
+    <!-- Sticky action buttons -->
+    <div class="action-bar">
+      {directionsUrl && (
+        <a
+          href={directionsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-primary flex-1 touch-target"
+          data-tour="directions-btn"
+        >
+          <span class="material-symbols-outlined text-[20px]">directions</span>
+          <span>Get Directions</span>
+        </a>
+      )}
+      <button
+        type="button"
+        class="btn-secondary copy-btn touch-target"
+        data-address={spot.address}
+        aria-label="Copy address to clipboard"
+      >
+        <span class="material-symbols-outlined text-[20px]">content_copy</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Copy feedback toast -->
+  <div id="copy-toast" class="copy-toast">
+    <span class="material-symbols-outlined text-[16px]">check_circle</span>
+    Copied!
+  </div>
+</BaseLayout>
+
+<script>
+  import { initDistanceDisplay } from '../../lib/geolocation';
+
+  // Copy address functionality
+  document.querySelectorAll('.copy-btn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const address = btn.getAttribute('data-address');
+      const toast = document.getElementById('copy-toast');
+
+      if (!address || !toast) return;
+
+      try {
+        await navigator.clipboard.writeText(address);
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    });
+  });
+
+  // Initialize distance display
+  initDistanceDisplay();
+</script>
+
+<style>
+  .action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    background: linear-gradient(to top, var(--color-bg) 80%, transparent);
+    z-index: 40;
+  }
+
+  .copy-toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background-color: var(--color-primary);
+    color: var(--color-bg);
+    padding: 0.75rem 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 100;
+  }
+
+  .copy-toast.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>

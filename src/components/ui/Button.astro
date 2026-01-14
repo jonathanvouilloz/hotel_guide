@@ -1,0 +1,61 @@
+---
+/**
+ * Button component - Reusable button with variants
+ */
+interface Props {
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  icon?: string;
+  iconPosition?: 'left' | 'right';
+  fullWidth?: boolean;
+  class?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  icon,
+  iconPosition = 'left',
+  fullWidth = false,
+  class: className = ''
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+
+const baseClasses = 'inline-flex items-center justify-center gap-2 font-bold transition-all active:scale-[0.98] touch-target';
+
+const variantClasses = {
+  primary: 'bg-(--color-primary) text-(--color-bg) rounded-xl shadow-[0_0_15px_var(--color-primary-glow)] hover:bg-(--color-primary-dark)',
+  secondary: 'bg-(--color-surface) text-(--color-text) border border-(--color-border-light) rounded-xl hover:bg-(--color-surface-input)',
+  ghost: 'bg-transparent text-(--color-text) rounded-full hover:bg-white/10',
+};
+
+const sizeClasses = {
+  sm: 'px-3 py-2 text-xs',
+  md: 'px-5 py-3 text-sm',
+  lg: 'px-6 py-4 text-base',
+};
+
+const widthClass = fullWidth ? 'w-full' : '';
+---
+
+<Tag
+  href={href}
+  class:list={[
+    baseClasses,
+    variantClasses[variant],
+    sizeClasses[size],
+    widthClass,
+    className
+  ]}
+>
+  {icon && iconPosition === 'left' && (
+    <span class="material-symbols-outlined text-[20px]">{icon}</span>
+  )}
+  <slot />
+  {icon && iconPosition === 'right' && (
+    <span class="material-symbols-outlined text-[20px]">{icon}</span>
+  )}
+</Tag>

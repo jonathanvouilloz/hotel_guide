@@ -1,0 +1,63 @@
+---
+/**
+ * ActivityCard - Inspirational card for markdown-based activities
+ * Magazine-style layout with hero image and overlaid text
+ */
+import type { MarkdownActivity } from '../lib/types';
+
+interface Props {
+  activity: MarkdownActivity;
+}
+
+const { activity } = Astro.props;
+const { frontmatter, slug } = activity;
+---
+
+<a href={`/activities/${slug}`} class="activity-card group">
+  <article class="relative overflow-hidden rounded-xl bg-(--color-surface-subtle) transition-transform active:scale-[0.99]">
+    <!-- Image or Placeholder -->
+    <div class="relative w-full h-48 overflow-hidden">
+      {frontmatter.image ? (
+        <div
+          class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+          style={`background-image: url("${frontmatter.image}");`}
+        ></div>
+      ) : (
+        <div class="absolute inset-0 bg-gradient-to-br from-(--color-primary)/30 to-(--color-surface) flex items-center justify-center">
+          <span class="material-symbols-outlined text-[64px] text-(--color-primary)/50">hiking</span>
+        </div>
+      )}
+
+      <!-- Gradient overlay for text readability -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+      <!-- Content overlay -->
+      <div class="absolute inset-x-0 bottom-0 p-4">
+        <h3 class="text-lg font-bold text-white leading-tight mb-1">
+          {frontmatter.title}
+        </h3>
+        <p class="text-sm text-white/80 line-clamp-2">
+          {frontmatter.tagline}
+        </p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex items-center justify-between p-4 pt-3">
+      <span class="text-xs font-medium text-(--color-text-secondary) uppercase tracking-wide">
+        Adventure
+      </span>
+      <span class="text-sm font-bold text-primary flex items-center gap-1">
+        Learn more
+        <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
+      </span>
+    </div>
+  </article>
+</a>
+
+<style>
+  .activity-card {
+    text-decoration: none;
+    display: block;
+  }
+</style>

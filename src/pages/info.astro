@@ -1,0 +1,245 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import AccordionItem from '../components/AccordionItem.astro';
+import EmergencyContacts from '../components/EmergencyContacts.astro';
+import { getSettings } from '../lib/content';
+
+// Import markdown frontmatter - PagesCMS stores content in frontmatter field
+import { frontmatter as houseRulesFm } from '../../content/house-rules.md';
+import { frontmatter as howToGetHereFm } from '../../content/how-to-get-here.md';
+import { marked } from 'marked';
+
+// Parse markdown content to HTML
+const houseRulesHtml = marked.parse((houseRulesFm as { content?: string }).content || '');
+const howToGetHereHtml = marked.parse((howToGetHereFm as { content?: string }).content || '');
+
+const settings = await getSettings();
+
+// Hero image for info page
+const heroImage = '/images/hero-hostel.jpg';
+---
+
+<BaseLayout title="Info & Rules">
+  <Header title={settings.hostelName} showBack backHref="/" transparent={true} />
+
+  <!-- Header Image -->
+  <div class="relative w-full h-48 -mt-16">
+    <!-- Gradient overlay for header readability -->
+    <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent z-10 pointer-events-none" />
+    <div
+      class="absolute inset-0 bg-cover bg-center"
+      style={`background-image: linear-gradient(to bottom, rgba(16, 31, 34, 0.3) 0%, rgba(16, 31, 34, 0.8) 70%, rgba(16, 31, 34, 1) 100%), url("${heroImage}");`}
+    >
+      <div class="absolute bottom-4 left-4">
+        <p class="text-white/70 font-medium text-xs uppercase tracking-wider mb-1">Practical Info</p>
+        <h2 class="text-white text-2xl font-bold leading-tight">Good to Know</h2>
+        <p class="text-white/50 text-sm mt-1">Everything for a smooth stay</p>
+      </div>
+    </div>
+  </div>
+
+  <main class="px-4 py-4 space-y-6">
+    <!-- Quick Access Cards -->
+    <section>
+      <h3 class="text-sm font-semibold text-(--color-text-secondary) uppercase tracking-wider mb-3">Quick Access</h3>
+      <div class="grid grid-cols-2 gap-3">
+        <!-- WiFi Card -->
+        <button
+          class="quick-card flex flex-col gap-3 rounded-xl bg-(--color-surface-subtle) p-4 items-start active:scale-95 transition-transform"
+          data-password={settings.wifi.password}
+        >
+          <span class="material-symbols-outlined text-(--color-primary) text-[28px]">wifi</span>
+          <div class="text-left">
+            <h2 class="text-(--color-text) text-base font-bold leading-tight">Wi-Fi</h2>
+            <p class="text-(--color-text-secondary) text-xs mt-1">Tap to copy password</p>
+          </div>
+        </button>
+
+        <!-- Chat Card -->
+        <a
+          href={`https://wa.me/${settings.contactWhatsApp?.replace(/[^0-9]/g, '')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="quick-card flex flex-col gap-3 rounded-xl bg-(--color-surface-subtle) p-4 items-start active:scale-95 transition-transform"
+        >
+          <span class="material-symbols-outlined text-(--color-primary) text-[28px]">chat</span>
+          <div class="text-left">
+            <h2 class="text-(--color-text) text-base font-bold leading-tight">Front Desk</h2>
+            <p class="text-(--color-text-secondary) text-xs mt-1">Start a chat</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Detailed Guide Accordions -->
+    <section>
+      <h3 class="text-sm font-semibold text-(--color-text-secondary) uppercase tracking-wider mb-3">Detailed Guide</h3>
+      <div class="space-y-3">
+        <!-- House Rules -->
+        <div data-tour="house-rules">
+          <AccordionItem icon="gavel" title="House Rules">
+            <div class="prose-dark space-y-3 text-sm text-(--color-text-secondary)" set:html={houseRulesHtml} />
+          </AccordionItem>
+        </div>
+
+        <!-- How to Get Here -->
+        <AccordionItem icon="directions" title="How to Get Here">
+          <div class="prose-dark space-y-3 text-sm text-(--color-text-secondary)" set:html={howToGetHereHtml} />
+        </AccordionItem>
+
+        <!-- Check In/Out -->
+        <AccordionItem icon="schedule" title="Check-in & Check-out">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between p-3 rounded-lg bg-(--color-surface-subtle)">
+              <div>
+                <p class="text-xs text-(--color-text-secondary) font-medium uppercase">Check-in</p>
+                <p class="text-(--color-text) font-bold text-lg">{settings.checkIn}</p>
+              </div>
+              <span class="material-symbols-outlined text-green-400 text-[28px]">login</span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-lg bg-(--color-surface-subtle)">
+              <div>
+                <p class="text-xs text-(--color-text-secondary) font-medium uppercase">Check-out</p>
+                <p class="text-(--color-text) font-bold text-lg">{settings.checkOut}</p>
+              </div>
+              <span class="material-symbols-outlined text-orange-400 text-[28px]">logout</span>
+            </div>
+          </div>
+        </AccordionItem>
+
+        <!-- Emergency Contacts -->
+        <AccordionItem icon="emergency" title="Emergency Contacts" iconColor="text-red-400">
+          <EmergencyContacts contacts={settings.emergencyContacts} />
+        </AccordionItem>
+      </div>
+    </section>
+
+    <!-- App Tour -->
+    <section>
+      <h3 class="text-sm font-semibold text-(--color-text-secondary) uppercase tracking-wider mb-3">App Tour</h3>
+      <button
+        id="replay-tour-btn"
+        class="w-full flex items-center gap-4 rounded-xl bg-(--color-surface-subtle) p-4 active:scale-[0.98] transition-transform"
+      >
+        <span class="material-symbols-outlined text-(--color-primary) text-[28px]">play_circle</span>
+        <div class="text-left">
+          <h2 class="text-(--color-text) text-base font-bold leading-tight">Replay App Tour</h2>
+          <p class="text-(--color-text-secondary) text-xs mt-1">See the quick guide again</p>
+        </div>
+      </button>
+    </section>
+  </main>
+
+  <!-- Copy toast -->
+  <div id="copy-toast" class="copy-toast">
+    <span class="material-symbols-outlined text-[16px]">check_circle</span>
+    Password copied!
+  </div>
+</BaseLayout>
+
+<script>
+  import { resetGuestData } from '../lib/guestData';
+
+  // WiFi copy functionality
+  document.querySelectorAll('.quick-card[data-password]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const password = btn.getAttribute('data-password');
+      const toast = document.getElementById('copy-toast');
+
+      if (!password || !toast) return;
+
+      try {
+        await navigator.clipboard.writeText(password);
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    });
+  });
+
+  // Replay onboarding functionality
+  document.getElementById('replay-tour-btn')?.addEventListener('click', () => {
+    resetGuestData();
+    window.location.href = '/';
+  });
+</script>
+
+<style is:global>
+  /* Hide the redundant h1 since accordion already shows title */
+  .prose-dark h1 {
+    display: none;
+  }
+
+  .prose-dark h2 {
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--color-separator);
+  }
+
+  .prose-dark h2:first-child {
+    margin-top: 0;
+  }
+
+  .prose-dark h3 {
+    color: var(--color-text);
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .prose-dark p {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .prose-dark ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose-dark li {
+    margin-bottom: 0.375rem;
+    line-height: 1.4;
+  }
+
+  .prose-dark strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .copy-toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background-color: var(--color-primary);
+    color: var(--color-bg);
+    padding: 0.75rem 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 100;
+  }
+
+  .copy-toast.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>

@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import ActivityCard from '../components/ActivityCard.astro';
+import { getMarkdownActivities } from '../lib/content';
+
+const activities = await getMarkdownActivities();
+---
+
+<BaseLayout title="Activities">
+  <Header title="Activities" showBack backHref="/explore" />
+
+  <main class="flex flex-col gap-5 px-4 pt-4 pb-4">
+    <!-- Hero Text -->
+    <div class="py-2">
+      <h2 class="text-2xl font-extrabold text-(--color-text) leading-tight">
+        Adventures
+        <br />
+        <span class="text-(--color-text-secondary) font-medium text-lg">
+          Things to do around Chiang Mai
+        </span>
+      </h2>
+    </div>
+
+    <!-- Activities Grid -->
+    {activities.length > 0 ? (
+      <div class="space-y-4">
+        {activities.map((activity) => (
+          <ActivityCard activity={activity} />
+        ))}
+      </div>
+    ) : (
+      <div class="card p-6 text-center">
+        <p class="text-(--color-text-secondary)">No activities listed yet.</p>
+      </div>
+    )}
+  </main>
+</BaseLayout>

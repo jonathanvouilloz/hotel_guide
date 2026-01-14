@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import SpotCard from '../components/SpotCard.astro';
+import { getSpots } from '../lib/content';
+import type { BarType } from '../lib/types';
+
+const allSpots = await getSpots('bars');
+
+// Extract unique bar types from spots
+const barTypes = [...new Set(
+  allSpots
+    .map(s => s.barType)
+    .filter((t): t is BarType => t !== undefined)
+)];
+
+// Get filter from URL
+const url = Astro.url;
+const activeFilter = url.searchParams.get('type') || 'all';
+
+// Filter spots
+const spots = activeFilter === 'all'
+  ? allSpots
+  : allSpots.filter(s => s.barType === activeFilter);
+
+function capitalize(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1).replace('-', ' ');
+}
+---
+
+<BaseLayout title="Bars">
+  <Header title="Bars & Nightlife" showBack backHref="/" />
+
+  <!-- Filter Chips -->
+  <div class="sticky top-16 z-10 w-full overflow-x-auto no-scrollbar bg-(--color-bg) py-3 px-4">
+    <div class="flex gap-2" id="filter-chips">
+      <a
+        href="/bars"
+        data-filter="all"
+        class="filter-chip flex h-8 shrink-0 items-center justify-center rounded-full px-4 transition-all active:scale-95"
+      >
+        <span class="text-sm">All</span>
+      </a>
+      {barTypes.map(type => (
+        <a
+          href={`/bars?type=${type}`}
+          data-filter={type}
+          class="filter-chip flex h-8 shrink-0 items-center justify-center rounded-full px-4 transition-all active:scale-95"
+        >
+          <span class="text-sm">{capitalize(type)}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <!-- Content -->
+  <main class="flex flex-col gap-4 px-4 pt-2 pb-4">
+    <!-- Hero Text -->
+    <div class="py-2">
+      <h2 class="text-2xl font-extrabold text-(--color-text) leading-tight">
+        Thirsty?
+      </h2>
+      <p class="text-(--color-text-secondary) text-base mt-1">
+        Best spots to meet travelers.
+      </p>
+    </div>
+
+    <!-- Spots List -->
+    {spots.length > 0 ? (
+      <div class="space-y-4">
+        {spots.map((spot) => (
+          <SpotCard spot={spot} category="bars" />
+        ))}
+      </div>
+    ) : (
+      <div class="card p-6 text-center">
+        <p class="text-(--color-text-secondary)">No bars found.</p>
+      </div>
+    )}
+
+    <!-- Footer Text -->
+    <div class="py-6 text-center">
+      <p class="text-sm text-(--color-text-secondary)">
+        Showing top recommendations near you.
+      </p>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .filter-chip {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .filter-chip span {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+  }
+  .filter-chip.active {
+    background: white;
+    border-color: white;
+  }
+  .filter-chip.active span {
+    color: #111827;
+    font-weight: 600;
+  }
+</style>
+
+<script>
+  import { initDistanceDisplay } from '../lib/geolocation';
+
+  // Initialize filter chips based on URL
+  function initFilters() {
+    const params = new URLSearchParams(window.location.search);
+    const activeFilter = params.get('type') || 'all';
+
+    document.querySelectorAll('.filter-chip').forEach((chip) => {
+      const filter = chip.getAttribute('data-filter');
+      if (filter === activeFilter) {
+        chip.classList.add('active');
+      } else {
+        chip.classList.remove('active');
+      }
+    });
+
+    // Filter spots
+    document.querySelectorAll('.spot-card').forEach((card) => {
+      const barType = card.getAttribute('data-bar-type');
+      if (activeFilter === 'all' || barType === activeFilter) {
+        (card as HTMLElement).style.display = '';
+      } else {
+        (card as HTMLElement).style.display = 'none';
+      }
+    });
+  }
+
+  // Run on page load
+  initFilters();
+  initDistanceDisplay();
+</script>

@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WiFiCard from '../components/WiFiCard.astro';
+import InstallCard from '../components/InstallCard.astro';
+import CategoryCard from '../components/CategoryCard.astro';
+import { getSettings } from '../lib/content';
+
+const settings = await getSettings();
+
+// Dynamic greeting based on time of day
+const hour = new Date().getHours();
+const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+
+// Images from settings (editable via PagesCMS)
+const heroImage = settings.heroImage || '/images/hero-hostel.jpg';
+const categoryImages = {
+  food: settings.categoryImages?.food || '/images/category-food.jpg',
+  activities: settings.categoryImages?.activities || '/images/category-activities.jpg',
+  services: settings.categoryImages?.services || '/images/category-services.jpg',
+  bars: settings.categoryImages?.bars || '/images/category-bars.jpg',
+};
+---
+
+<BaseLayout title="Home">
+  <!-- Hero Section with Header Overlay -->
+  <div class="relative w-full">
+    <!-- Gradient overlay at top for header readability -->
+    <div class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/70 to-transparent z-10 pointer-events-none" />
+
+    <!-- Custom Header (transparent with backdrop blur, overlaying hero) -->
+    <header data-tour="welcome" class="absolute top-0 inset-x-0 z-20 flex items-center justify-between px-4 py-3 backdrop-blur-sm">
+      <div class="flex items-center gap-3">
+        <img
+          src={settings.logo}
+          alt={`${settings.hostelName} logo`}
+          class="size-11 rounded-xl object-cover bg-white/10 backdrop-blur-sm"
+        />
+        <div>
+          <p class="text-sm text-white/70">{greeting}</p>
+          <p class="text-base font-bold text-white leading-tight">{settings.hostelName}</p>
+        </div>
+      </div>
+      <a
+        href="/info"
+        class="flex size-10 items-center justify-center rounded-full text-white/80 hover:text-white transition-colors"
+        aria-label="Help"
+      >
+        <span class="material-symbols-outlined text-[20px]">help</span>
+      </a>
+    </header>
+
+    <!-- Hero Image -->
+    <div
+      class="relative w-full h-[340px] bg-cover bg-center"
+      style={`background-image: linear-gradient(to bottom, rgba(16, 31, 34, 0) 0%, rgba(16, 31, 34, 0.8) 90%, rgba(16, 31, 34, 1) 100%), url("${heroImage}");`}
+    >
+      <!-- Hero Content -->
+      <div class="absolute bottom-20 left-0 w-full px-4 flex flex-col items-start gap-1">
+        <!-- Hero Title -->
+        <h1 class="text-3xl font-extrabold leading-tight tracking-tight text-white max-w-[80%]">
+          Ready for today's adventure?
+        </h1>
+      </div>
+    </div>
+  </div>
+
+  <!-- Essential Info Card (Overlapping Hero) -->
+  <div data-tour="wifi" class="px-4 -mt-16 relative z-10">
+    <WiFiCard
+      networkName={settings.wifi.name}
+      password={settings.wifi.password}
+      checkoutTime={settings.checkOut}
+    />
+  </div>
+
+  <!-- Install Card (shown if not installed as PWA) -->
+  <div class="px-4 mt-3">
+    <InstallCard />
+  </div>
+
+  <!-- Explore Grid -->
+  <div class="flex flex-col gap-4 p-4 mt-6">
+    <div class="flex items-end justify-between">
+      <h2 class="text-xl font-bold text-(--color-text) tracking-tight leading-none">Explore</h2>
+      <a href="/explore" class="text-xs font-bold text-(--color-primary) hover:text-(--color-primary)/80 leading-none">
+        View All
+      </a>
+    </div>
+
+    <nav data-tour="explore" class="grid grid-cols-2 gap-3" aria-label="Explore categories">
+      <!-- Food & Drink -->
+      <CategoryCard
+        icon="restaurant"
+        label="Food & Drink"
+        subtitle="Best local eats"
+        href="/restaurants"
+        image={categoryImages.food}
+      />
+
+      <!-- Activities -->
+      <CategoryCard
+        icon="hiking"
+        label="Activities"
+        subtitle="Daily tours"
+        href="/activities"
+        image={categoryImages.activities}
+      />
+
+      <!-- Services -->
+      <CategoryCard
+        icon="local_laundry_service"
+        label="Services"
+        subtitle="Useful services"
+        href="/services"
+        image={categoryImages.services}
+        aspectRatio="square"
+      />
+
+      <!-- Bars & Nightlife -->
+      <CategoryCard
+        icon="local_bar"
+        label="Bars"
+        subtitle="Best nightlife"
+        href="/bars"
+        image={categoryImages.bars}
+        aspectRatio="square"
+      />
+    </nav>
+  </div>
+</BaseLayout>
+
+
+<style>
+  /* Animate pulse for badge dot */
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+/**
+ * Icon component - Wrapper for Material Symbols
+ */
+interface Props {
+  name: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  filled?: boolean;
+  class?: string;
+}
+
+const { name, size = 'md', filled = false, class: className = '' } = Astro.props;
+
+const sizeClasses = {
+  sm: 'text-[18px]',
+  md: 'text-[24px]',
+  lg: 'text-[28px]',
+  xl: 'text-[32px]',
+};
+
+const filledClass = filled ? 'filled' : '';
+---
+
+<span
+  class:list={[
+    'material-symbols-outlined',
+    sizeClasses[size],
+    filledClass,
+    className
+  ]}
+>
+  {name}
+</span>

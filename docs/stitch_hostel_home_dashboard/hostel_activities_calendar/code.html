@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hostel Activities Calendar</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13c8ec",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101f22",
+                        "surface-dark": "#192f33",
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem", 
+                        "lg": "1rem", 
+                        "xl": "1.5rem", 
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased overflow-x-hidden">
+<div class="relative flex h-full min-h-screen w-full max-w-md mx-auto flex-col pb-24 shadow-2xl">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-50 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-gray-200 dark:border-white/5 p-4 pb-2 transition-colors duration-300">
+<div class="flex items-center justify-between">
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Daily Vibe</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex size-10 items-center justify-center rounded-full text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</div>
+<!-- Date Chips -->
+<div class="mt-4 flex gap-3 overflow-x-auto pb-2 scrollbar-hide no-scrollbar -mx-4 px-4">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary px-5 shadow-lg shadow-primary/25 transition-all active:scale-95">
+<p class="text-white text-sm font-bold leading-normal">Today</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/10 px-5 transition-all hover:bg-gray-50 dark:hover:bg-white/5 active:scale-95">
+<p class="text-gray-600 dark:text-gray-300 text-sm font-medium leading-normal">Tomorrow</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/10 px-5 transition-all hover:bg-gray-50 dark:hover:bg-white/5 active:scale-95">
+<p class="text-gray-600 dark:text-gray-300 text-sm font-medium leading-normal">Wed 14</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/10 px-5 transition-all hover:bg-gray-50 dark:hover:bg-white/5 active:scale-95">
+<p class="text-gray-600 dark:text-gray-300 text-sm font-medium leading-normal">Thu 15</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/10 px-5 transition-all hover:bg-gray-50 dark:hover:bg-white/5 active:scale-95">
+<p class="text-gray-600 dark:text-gray-300 text-sm font-medium leading-normal">Fri 16</p>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 p-4">
+<!-- Timeline Container -->
+<div class="relative pl-2">
+<!-- Vertical Line Background -->
+<div class="absolute left-[27px] top-4 bottom-0 w-[2px] bg-gradient-to-b from-primary/50 via-gray-300 dark:via-gray-700 to-transparent"></div>
+<!-- Event 1: Morning -->
+<div class="relative grid grid-cols-[56px_1fr] gap-x-4 mb-8 group">
+<!-- Timeline Node -->
+<div class="flex flex-col items-center pt-1 z-10">
+<div class="flex items-center justify-center size-14 rounded-2xl bg-white dark:bg-surface-dark border-2 border-primary shadow-lg shadow-primary/20 text-primary">
+<span class="material-symbols-outlined text-[28px]">directions_walk</span>
+</div>
+</div>
+<!-- Card Content -->
+<div class="flex flex-col">
+<div class="flex items-center gap-2 mb-2">
+<span class="text-primary font-bold text-sm bg-primary/10 px-2 py-0.5 rounded-md">09:00 AM</span>
+<span class="w-1 h-1 rounded-full bg-gray-400"></span>
+<span class="text-gray-500 dark:text-gray-400 text-xs font-medium">Lobby Meeting</span>
+</div>
+<div class="relative overflow-hidden rounded-2xl bg-white dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-white/5">
+<!-- Card Image Header -->
+<div class="h-28 w-full bg-cover bg-center relative" data-alt="Tourists walking in a historic european city street" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCm6_xbPZGDEwAOn7LLYCFAHGNJDyuWOfnxZ2qMNC70xYp23GMW0bL6u42PpOMxhhT3gzUy5EOc_hZaOsr9jUmtnkfXqVyymKTVL5OcuxeSaKzAT6gTBlB8mu5BlTQme8UtlaWeSVFCafGd4Oi_U011vMdqyRK5sFYUlC3ibilcHkLFadM5GLuPmPus-Yq2-8VFP-hV80ktVfErg6vgFisu9c0r4rxqLu9knKELOK63pt1ze5Yq8t0xdf2H-6Wu_0b_F0NStinCIQ');">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<h3 class="absolute bottom-3 left-4 text-white text-lg font-bold leading-tight">Free Walking Tour</h3>
+</div>
+<!-- Card Body -->
+<div class="p-4 pt-3">
+<p class="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">Explore the hidden gems of the city with our local guide. Don't forget comfortable shoes!</p>
+<div class="flex items-center justify-between">
+<!-- Avatar Stack -->
+<div class="flex -space-x-2 overflow-hidden">
+<div class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-surface-dark bg-gray-200 bg-cover bg-center" data-alt="Portrait of a young woman" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuATeBv692F574WQsKGe0lkFLG59ep-_KmICi_OyV8azxxrwEg2cCurVUX_qxp0nMtr7HMgsGJ-5UrIgUt32Hl8csOlmHVRed9z2tUU8X1qxd4tn86uFhf3gIMGOhVkCYw574WB5P7IUe960PWy5976Uef8-A6zKffwoYk-B3jU6jNkSz6P77vB8geo1gSTBQnl45DK6-mTPWCpfzX7iaM2GqKHfg_2wg2BVmKtmfQHnXz1HmWqNZTsFLiL10y-EdgjtVTIUU26c0A')"></div>
+<div class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-surface-dark bg-gray-200 bg-cover bg-center" data-alt="Portrait of a young man" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCU5IekN55e_5D_4BQDa9Tx0SLhfT4I1oDBT1mGMdMk06uu0u0IxO795KqOzwpT09R3DlEl3hiM_M_VJ8aH8fDIinJC0t19HE0QhwKGkYWnhuCqFUXRONhV_VyMQE5mAnERfYknSgY3rek9Fjs3j_CMVZJD_F8g2qGx0G_78v8t3KFH0VVf2azeebz9x7T9zBk7XX3CFAGoXhkTqNOeMo5MgjjdneBDs3yt-0eIQ6f-W4aqDoG-Heyu1NSqQmyBduSu3d-V0_V-yg')"></div>
+<div class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-surface-dark bg-gray-200 bg-cover bg-center" data-alt="Portrait of a smiling man" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBKzbS_JvACSkYZq6QlywORlLddInE6r6y4sN9Oh-D3aeDgB4zvKEBGJAEDW0SdlV0ZRaHf49z6TECF-6ZCYnaddYCBlX2btZPCdlktCKkX6EqwXUGonkFEMkQa1sG4ok_gPmxfmVepmAiwdH93sqvR0mPym_8cYm0xNUyfVrigXNn4HWqIENODGWnG0QP5o6MIsagM9kFTshYW-tCforP6z8Vp-xRteAEDMmUeBqKrvzq8Y-LDDZ7o6V50CFgx6Nu31bssS7wIjA')"></div>
+<div class="flex size-8 items-center justify-center rounded-full ring-2 ring-white dark:ring-surface-dark bg-gray-100 dark:bg-gray-700 text-[10px] font-bold text-gray-600 dark:text-gray-300">+21</div>
+</div>
+<button class="flex items-center justify-center h-9 px-4 rounded-xl bg-primary text-white text-sm font-bold shadow-lg shadow-primary/30 active:scale-95 transition-transform">
+                                        Join
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Event 2: Evening -->
+<div class="relative grid grid-cols-[56px_1fr] gap-x-4 mb-8 group">
+<!-- Timeline Node -->
+<div class="flex flex-col items-center pt-1 z-10">
+<div class="flex items-center justify-center size-14 rounded-2xl bg-white dark:bg-surface-dark border-2 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 group-hover:border-primary group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[28px]">restaurant</span>
+</div>
+</div>
+<!-- Card Content -->
+<div class="flex flex-col">
+<div class="flex items-center gap-2 mb-2">
+<span class="text-gray-900 dark:text-white font-bold text-sm bg-gray-100 dark:bg-white/10 px-2 py-0.5 rounded-md">07:00 PM</span>
+<span class="w-1 h-1 rounded-full bg-gray-400"></span>
+<span class="text-gray-500 dark:text-gray-400 text-xs font-medium">Common Room</span>
+</div>
+<div class="relative overflow-hidden rounded-2xl bg-white dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-white/5">
+<div class="h-28 w-full bg-cover bg-center relative" data-alt="Delicious pasta dish close up" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAgLjBHKZqmYezHtovs5H6ciKVUOhgC7zaeoyxl73p2PIuO2shhHus2HHlV37SVjTosOqA8lnoMWCKH18eH61ud5nDi9Yvz-Opm_xHpLeNuwRlId8lzY4-RYX9RvIKN0xXdNUqdqTvjQkzWGRDqk1bsa-lt8iCF76KyWomzsUJ4Jzb43rBaIIeMKdwx0QnVSyTRYljePEDhjFZHULHcsuBJI-LYZtNv-49wPsvwkL_KN-evqs2SgFsOgMyJh7Ms0ipj3-nwdo7J5Q');">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<h3 class="absolute bottom-3 left-4 text-white text-lg font-bold leading-tight">Pasta Night 🍝</h3>
+</div>
+<div class="p-4 pt-3">
+<p class="text-gray-600 dark:text-gray-300 text-sm mb-4">Free dinner for everyone! Come hungry and meet fellow travelers. BYOB.</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2 overflow-hidden">
+<div class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-surface-dark bg-gray-200 bg-cover bg-center" data-alt="Portrait of a woman" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBJ37cjFZxVO6WbM9u3imff4a7_X2M8H13X3ijPsgodvTW1p8C9GLu9IGm5fscyIDXeNvVQiEnFQUsECxBL9crkKV8uEOl0DfBQzK5QS98FgiGZtMyKKJMVc0oQ_LUtXg2PtHwPqx-Fbn1UFB-vx6bZFAF1JCSLvA2QiEuyEi9wXZ2vizDFExROij-9cjRxYi8rssK2jYNHiCI91gJTev-mISolw1Ejr6vN4JMk_KuGw8mVkiTOHJXj6Bynvzhi_RP5M656BwWsFw')"></div>
+<div class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-surface-dark bg-gray-200 bg-cover bg-center" data-alt="Portrait of a man" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCqXnTSjOU1qainTw748vd5uZyf9nQFMKaC4JgXqwbHV1XYut0s7y3jeYTOkTVdNxHFmaG73PbeZkFW-WgMHdbna_XkbpEeHu4sRIQSTFKFk_xR66VzMavDvq6SK4udPfgLSJUVZ_nf2my5ia4nfL00NXhFXS1a3ZcyVdNunc8PE8-Va2NWq25bVx8m-KHswhlvq2eRYryNAsHohEJuWyYV6mmesUVy7KRDSq8F0hwo73ZJ51WGZrRHG3-91JBVrCsJ3sFjUKXopw')"></div>
+<div class="flex size-8 items-center justify-center rounded-full ring-2 ring-white dark:ring-surface-dark bg-gray-100 dark:bg-gray-700 text-[10px] font-bold text-gray-600 dark:text-gray-300">+43</div>
+</div>
+<button class="flex items-center justify-center h-9 px-4 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-bold shadow-lg hover:bg-gray-800 dark:hover:bg-gray-200 active:scale-95 transition-all">
+                                        Join
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Event 3: Night -->
+<div class="relative grid grid-cols-[56px_1fr] gap-x-4 mb-8 group">
+<!-- Timeline Node -->
+<div class="flex flex-col items-center pt-1 z-10">
+<div class="flex items-center justify-center size-14 rounded-2xl bg-white dark:bg-surface-dark border-2 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 group-hover:border-primary group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[28px]">local_bar</span>
+</div>
+</div>
+<!-- Card Content -->
+<div class="flex flex-col">
+<div class="flex items-center gap-2 mb-2">
+<span class="text-gray-900 dark:text-white font-bold text-sm bg-gray-100 dark:bg-white/10 px-2 py-0.5 rounded-md">10:00 PM</span>
+<span class="w-1 h-1 rounded-full bg-gray-400"></span>
+<span class="text-gray-500 dark:text-gray-400 text-xs font-medium">Reception</span>
+</div>
+<div class="relative overflow-hidden rounded-2xl bg-white dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-white/5">
+<div class="h-28 w-full bg-cover bg-center relative" data-alt="Nightclub scene with lights" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBZOgmZR-1No7lUrFleNs-v4XMq6LuvztymDQN9O1Wz9nNvCUvozoPPe7Y2en13wvSmTkRUED0bwDaZCANvRssyCi1_WwjmnEpnasWTdaiHaQ4i_vNgiiE-MeWyn-5PIpp6FSudg-CzlrIjp3E9eTKdvZhEPGvp3tsEYtmgbhUQFZXgd_MGf7R72vesSaDx2xkh3I3wQgN4sPcdprD-8uF096a2qnNQq6rhzHTuBVqQCcp-qCFhtp3XgtPYtN9ZuKnO-RkaLIHffA');">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<h3 class="absolute bottom-3 left-4 text-white text-lg font-bold leading-tight">Pub Crawl 🍻</h3>
+</div>
+<div class="p-4 pt-3">
+<p class="text-gray-600 dark:text-gray-300 text-sm mb-4">Visiting 3 bars and ending in a club. Includes 1 free shot at each bar!</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2 overflow-hidden">
+<div class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-surface-dark bg-gray-200 bg-cover bg-center" data-alt="Portrait of a bearded man" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBE-JftX8IwLabZqQvMovjGUOmzcN3029nvmT_apizH2oiq-KE-i4ajYDaG_iYJgok70bZc8lw0p6E9h6MrmfbVfsWsOgE2z2Wdrn-TupMs2C5NrxQIj6UWZmH7nH6EOeAUbIqZoKlsp5p4fXCE1NySeGOhW2WWX3r0y46i6hp8dXKy5vryd-ADOdpi0kv9yt2MSM7Yjz6zqoySKgachhB2ZbnJBZPZXmnjIY-OaTdbxQkTvE4D3nDw2px7vqE9c5Z3ApNQqgl5Bg')"></div>
+<div class="flex size-8 items-center justify-center rounded-full ring-2 ring-white dark:ring-surface-dark bg-gray-100 dark:bg-gray-700 text-[10px] font-bold text-gray-600 dark:text-gray-300">+11</div>
+</div>
+<button class="flex items-center justify-center h-9 px-4 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-bold shadow-lg hover:bg-gray-800 dark:hover:bg-gray-200 active:scale-95 transition-all">
+                                        Join
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State Suggestion at bottom of timeline -->
+<div class="relative grid grid-cols-[56px_1fr] gap-x-4 opacity-50">
+<div class="flex flex-col items-center pt-1 z-10">
+<div class="w-[2px] h-full bg-gradient-to-b from-gray-300 dark:from-gray-700 to-transparent absolute top-0 left-[27px] -z-10"></div>
+<div class="flex items-center justify-center size-8 rounded-full bg-gray-200 dark:bg-gray-800 border-2 border-transparent">
+<span class="material-symbols-outlined text-[16px] text-gray-500">more_horiz</span>
+</div>
+</div>
+<div class="py-2">
+<p class="text-xs text-gray-400">That's all for today. Check tomorrow!</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 w-full max-w-md bg-white dark:bg-[#0f1b1e] border-t border-gray-200 dark:border-white/5 pb-5 pt-3 px-6 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-2xl">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-2xl fill-1">calendar_month</span>
+<span class="text-[10px] font-medium">Events</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-2xl">explore</span>
+<span class="text-[10px] font-medium">Tips</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-2xl">room_service</span>
+<span class="text-[10px] font-medium">Services</span>
+</button>
+</nav>
+</div>
+<style>
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        /* Custom styles to force icon fill where needed using Material Symbols */
+        .material-symbols-outlined.fill-1 {
+          font-variation-settings:
+          'FILL' 1,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+    </style>
+</body></html>

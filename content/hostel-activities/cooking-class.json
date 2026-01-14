@@ -1,0 +1,18 @@
+{
+  "id": "cooking-class",
+  "title": "Cooking Class",
+  "tagline": "5 hour to learn to cook Pad Thai, Papaya Salad and more!",
+  "description": "Yes, let's go",
+  "type": "food",
+  "location": "Hostel",
+  "lat": null,
+  "lng": null,
+  "image": null,
+  "price": "1000 THB",
+  "cta": {
+    "type": "whatsapp",
+    "label": "Book your spot",
+    "url": "",
+    "message": "Hi! I'd like to join the Cooking Class"
+  }
+}

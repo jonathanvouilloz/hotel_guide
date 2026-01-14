@@ -1,0 +1,37 @@
+---
+/**
+ * Badge component - Tags and labels
+ */
+interface Props {
+  variant?: 'default' | 'success' | 'warning' | 'error' | 'info' | 'purple';
+  size?: 'sm' | 'md';
+  class?: string;
+}
+
+const { variant = 'default', size = 'sm', class: className = '' } = Astro.props;
+
+const variantClasses = {
+  default: 'bg-(--color-primary)/20 text-(--color-primary)',
+  success: 'bg-green-500/20 text-green-300',
+  warning: 'bg-orange-500/20 text-orange-300',
+  error: 'bg-red-500/20 text-red-300',
+  info: 'bg-blue-500/20 text-blue-300',
+  purple: 'bg-purple-500/20 text-purple-300',
+};
+
+const sizeClasses = {
+  sm: 'px-2 py-1 text-[10px]',
+  md: 'px-3 py-1.5 text-xs',
+};
+---
+
+<span
+  class:list={[
+    'inline-flex items-center rounded-md font-bold uppercase tracking-wider',
+    variantClasses[variant],
+    sizeClasses[size],
+    className
+  ]}
+>
+  <slot />
+</span>

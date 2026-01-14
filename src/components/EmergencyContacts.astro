@@ -1,0 +1,50 @@
+---
+/**
+ * EmergencyContacts - Emergency contact buttons
+ * Redesigned for BLACK theme
+ */
+import type { EmergencyContact } from '../lib/types';
+
+interface Props {
+  contacts: EmergencyContact[];
+}
+
+const { contacts } = Astro.props;
+
+// Map contact names to icons
+function getContactIcon(name: string): string {
+  const nameLower = name.toLowerCase();
+  if (nameLower.includes('police')) return 'local_police';
+  if (nameLower.includes('hospital') || nameLower.includes('ambulance')) return 'medical_services';
+  if (nameLower.includes('fire')) return 'local_fire_department';
+  return 'person';
+}
+---
+
+<div class="grid grid-cols-2 gap-3">
+  {contacts.map((contact, index) => (
+    <a
+      href={`tel:${contact.phone}`}
+      class:list={[
+        'emergency-btn flex flex-col items-center justify-center gap-1 p-3 rounded-lg transition-all active:scale-95',
+        index === 0 || index === 1
+          ? 'bg-red-500/10'
+          : 'bg-(--color-surface-subtle)'
+      ]}
+    >
+      <span class:list={[
+        'material-symbols-outlined text-[24px]',
+        index === 0 || index === 1 ? 'text-red-400' : 'text-(--color-text-secondary)'
+      ]}>
+        {getContactIcon(contact.name)}
+      </span>
+      <span class:list={[
+        'text-sm font-bold text-center leading-tight',
+        index === 0 || index === 1 ? 'text-red-300' : 'text-(--color-text)'
+      ]}>
+        {contact.name}
+      </span>
+      <span class="text-xs text-(--color-text-secondary) font-mono">{contact.phone}</span>
+    </a>
+  ))}
+</div>

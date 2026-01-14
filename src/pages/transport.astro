@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import SpotCard from '../components/SpotCard.astro';
+import { getSpots } from '../lib/content';
+
+const spots = await getSpots('transport');
+---
+
+<BaseLayout title="Transport">
+  <Header title="Transport" showBack backHref="/explore" />
+
+  <main class="flex flex-col gap-5 px-4 pt-4 pb-4">
+    <!-- Hero Text -->
+    <div class="py-2">
+      <h2 class="text-2xl font-extrabold text-(--color-text) leading-tight">
+        Getting Around
+        <br />
+        <span class="text-(--color-text-secondary) font-medium text-lg">
+          Bikes, buses & more.
+        </span>
+      </h2>
+    </div>
+
+    <!-- Spots List -->
+    {spots.length > 0 ? (
+      <div class="space-y-4">
+        {spots.map(spot => (
+          <SpotCard spot={spot} category="transport" />
+        ))}
+      </div>
+    ) : (
+      <div class="card p-6 text-center">
+        <p class="text-(--color-text-secondary)">No transport services listed yet.</p>
+      </div>
+    )}
+  </main>
+</BaseLayout>
+
+<script>
+  import { initDistanceDisplay } from '../lib/geolocation';
+  initDistanceDisplay();
+</script>

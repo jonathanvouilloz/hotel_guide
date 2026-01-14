@@ -1,0 +1,44 @@
+---
+/**
+ * Card component - Container with surface styling
+ */
+interface Props {
+  href?: string;
+  elevated?: boolean;
+  padding?: 'none' | 'sm' | 'md' | 'lg';
+  class?: string;
+}
+
+const {
+  href,
+  elevated = false,
+  padding = 'md',
+  class: className = ''
+} = Astro.props;
+
+const Tag = href ? 'a' : 'div';
+
+const baseClasses = 'block rounded-2xl bg-(--color-surface) border border-(--color-border) overflow-hidden';
+const elevatedClass = elevated ? 'shadow-[0_8px_30px_rgba(0,0,0,0.4)]' : '';
+const linkClasses = href ? 'transition-transform active:scale-[0.99] hover:border-(--color-border-light)' : '';
+
+const paddingClasses = {
+  none: '',
+  sm: 'p-3',
+  md: 'p-4',
+  lg: 'p-5',
+};
+---
+
+<Tag
+  href={href}
+  class:list={[
+    baseClasses,
+    elevatedClass,
+    linkClasses,
+    paddingClasses[padding],
+    className
+  ]}
+>
+  <slot />
+</Tag>

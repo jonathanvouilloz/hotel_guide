@@ -1,0 +1,36 @@
+{
+  "hostelName": "Whoopers Hostel Chiang Mai",
+  "logo": "/images/whoopers.jpeg",
+  "favicon": "/images/whoopers.jpeg",
+  "pwaIcon192": "/images/whoopers.jpeg",
+  "pwaIcon512": "/images/whoopers.jpeg",
+  "primaryColor": "fbe845",
+  "wifi": {
+    "name": "WHOOPERS 2.4G",
+    "password": "getalife"
+  },
+  "checkIn": "14:00",
+  "checkOut": "11:00",
+  "contactWhatsApp": "+66812345678",
+  "emergencyContacts": [
+    {
+      "name": "Hostel Reception",
+      "phone": "+66812345678"
+    },
+    {
+      "name": "Tourist Police",
+      "phone": "1155"
+    },
+    {
+      "name": "Hospital (Ram)",
+      "phone": "+6653920300"
+    }
+  ],
+  "timezone": "Asia/Bangkok",
+  "categoryImages": {
+    "food": "/images/category-food.jpg",
+    "activities": "/images/category-activities.jpg",
+    "services": "/images/category-services.jpg",
+    "bars": "/images/category-bars.jpg"
+  }
+}

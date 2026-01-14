@@ -1,0 +1,583 @@
+---
+import { getSettings } from '../lib/content';
+
+const settings = await getSettings();
+const hasWhatsAppGroup = Boolean(settings.whatsappGroupLink);
+---
+
+<div
+  id="onboarding-overlay"
+  class="onboarding-overlay hidden"
+  data-webhook={settings.webhookUrl || ''}
+  data-whatsapp-group={settings.whatsappGroupLink || ''}
+>
+  <div class="onboarding-container">
+    <!-- Skip button -->
+    <button id="skip-btn" class="skip-btn">Skip</button>
+
+    <!-- Carousel container -->
+    <div class="carousel-container" id="carousel">
+      <!-- Slide 1: Welcome -->
+      <div class="carousel-slide" data-slide="0">
+        <div class="slide-content">
+          <img
+            src={settings.logo}
+            alt={settings.hostelName}
+            class="size-24 rounded-2xl mx-auto mb-6 shadow-lg"
+          />
+          <h1 class="text-2xl font-bold text-(--color-text) mb-3">
+            Welcome to {settings.hostelName}
+          </h1>
+          <p class="text-(--color-text-secondary) text-base leading-relaxed">
+            Your digital guide to make the most of your stay
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 2: Features -->
+      <div class="carousel-slide" data-slide="1">
+        <div class="slide-content">
+          <h2 class="text-xl font-bold text-(--color-text) mb-6">
+            Everything you need
+          </h2>
+          <ul class="features-list">
+            <li>
+              <span class="feature-icon">
+                <span class="material-symbols-outlined">wifi</span>
+              </span>
+              <div>
+                <span class="feature-title">WiFi access</span>
+                <span class="feature-desc">One-tap copy password</span>
+              </div>
+            </li>
+            <li>
+              <span class="feature-icon">
+                <span class="material-symbols-outlined">restaurant</span>
+              </span>
+              <div>
+                <span class="feature-title">Local spots</span>
+                <span class="feature-desc">Best restaurants, bars & more</span>
+              </div>
+            </li>
+            <li>
+              <span class="feature-icon">
+                <span class="material-symbols-outlined">calendar_month</span>
+              </span>
+              <div>
+                <span class="feature-title">Daily events</span>
+                <span class="feature-desc">Yoga, cooking class, pub crawl...</span>
+              </div>
+            </li>
+            <li>
+              <span class="feature-icon">
+                <span class="material-symbols-outlined">menu_book</span>
+              </span>
+              <div>
+                <span class="feature-title">House info</span>
+                <span class="feature-desc">Rules, directions, contacts</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Slide 3: Stay Info -->
+      <div class="carousel-slide" data-slide="2">
+        <div class="slide-content">
+          <h2 class="text-xl font-bold text-(--color-text) mb-2">
+            Tell us about your stay
+          </h2>
+          <p class="text-(--color-text-secondary) text-sm mb-6">
+            So we can make it even better
+          </p>
+
+          <form id="guest-form" class="guest-form">
+            <div class="form-group">
+              <label for="checkout-date">Check-out date</label>
+              <input
+                type="date"
+                id="checkout-date"
+                name="checkout-date"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone number <span class="optional">(optional)</span></label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="+66 ..."
+                autocomplete="tel"
+              />
+            </div>
+
+            {hasWhatsAppGroup && (
+              <a
+                href={settings.whatsappGroupLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="whatsapp-group-btn"
+                id="whatsapp-group-link"
+              >
+                <span class="material-symbols-outlined">group</span>
+                Join our WhatsApp Group
+              </a>
+            )}
+
+            <button type="submit" class="submit-btn">
+              Let's Go!
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indicators -->
+    <div class="carousel-indicators">
+      <button class="indicator active" data-slide="0" aria-label="Slide 1"></button>
+      <button class="indicator" data-slide="1" aria-label="Slide 2"></button>
+      <button class="indicator" data-slide="2" aria-label="Slide 3"></button>
+    </div>
+
+    <!-- Navigation buttons -->
+    <div class="carousel-nav">
+      <button id="prev-btn" class="nav-btn hidden">
+        <span class="material-symbols-outlined">arrow_back</span>
+        Back
+      </button>
+      <button id="next-btn" class="nav-btn nav-btn-primary">
+        Next
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .onboarding-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background-color: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .onboarding-overlay.hidden {
+    display: none;
+  }
+
+  .onboarding-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+  }
+
+  /* Skip button */
+  .skip-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .skip-btn:hover {
+    color: var(--color-text);
+  }
+
+  /* Hide skip on last slide */
+  .skip-btn.hidden {
+    display: none;
+  }
+
+  /* Carousel */
+  .carousel-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+    scrollbar-width: none;
+  }
+
+  .carousel-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel-slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    padding-top: 4rem;
+  }
+
+  .slide-content {
+    width: 100%;
+    max-width: 340px;
+    text-align: center;
+  }
+
+  /* Features list */
+  .features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .features-list li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+  }
+
+  .feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background-color: var(--color-primary);
+    color: var(--color-bg);
+    flex-shrink: 0;
+  }
+
+  .feature-icon .material-symbols-outlined {
+    font-size: 22px;
+  }
+
+  .features-list li > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .feature-title {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--color-text);
+  }
+
+  .feature-desc {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+  }
+
+  /* Form */
+  .guest-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: left;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+  }
+
+  .form-group .optional {
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-light);
+    color: var(--color-text);
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-glow);
+  }
+
+  .form-group input::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  /* Date input styling for webkit */
+  .form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.5);
+    cursor: pointer;
+  }
+
+  /* WhatsApp group button */
+  .whatsapp-group-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-lg);
+    background-color: #25D366;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+
+  .whatsapp-group-btn:hover {
+    background-color: #20BD5A;
+  }
+
+  .whatsapp-group-btn .material-symbols-outlined {
+    font-size: 20px;
+  }
+
+  /* Submit button */
+  .submit-btn {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-lg);
+    background-color: var(--color-primary);
+    color: var(--color-bg);
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 0.5rem;
+  }
+
+  .submit-btn:hover {
+    background-color: var(--color-primary-dark);
+  }
+
+  /* Indicators */
+  .carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+
+  .indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-border-light);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .indicator.active {
+    width: 24px;
+    border-radius: 4px;
+    background-color: var(--color-primary);
+  }
+
+  /* Navigation */
+  .carousel-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    gap: 1rem;
+  }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-lg);
+    font-weight: 500;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid var(--color-border-light);
+    background-color: transparent;
+    color: var(--color-text-secondary);
+  }
+
+  .nav-btn:hover {
+    background-color: var(--color-surface-hover);
+    color: var(--color-text);
+  }
+
+  .nav-btn.hidden {
+    visibility: hidden;
+  }
+
+  .nav-btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-bg);
+    border-color: var(--color-primary);
+  }
+
+  .nav-btn-primary:hover {
+    background-color: var(--color-primary-dark);
+  }
+
+  .nav-btn .material-symbols-outlined {
+    font-size: 18px;
+  }
+</style>
+
+<script>
+  import {
+    hasSeenOnboarding,
+    markOnboardingShown,
+    saveGuestData,
+    submitGuestData,
+    migrateOldOnboardingData,
+  } from '../lib/guestData';
+
+  // Migrate old onboarding data on first load
+  migrateOldOnboardingData();
+
+  // Elements
+  const overlay = document.getElementById('onboarding-overlay') as HTMLDivElement | null;
+  const carousel = document.getElementById('carousel') as HTMLDivElement | null;
+  const indicators = document.querySelectorAll<HTMLButtonElement>('.indicator');
+  const prevBtn = document.getElementById('prev-btn') as HTMLButtonElement | null;
+  const nextBtn = document.getElementById('next-btn') as HTMLButtonElement | null;
+  const skipBtn = document.getElementById('skip-btn') as HTMLButtonElement | null;
+  const form = document.getElementById('guest-form') as HTMLFormElement | null;
+
+  // Get webhook URL from data attribute
+  const webhookUrl = overlay?.dataset.webhook || '';
+
+  // State
+  let currentSlide = 0;
+  const totalSlides = 3;
+
+  // Initialize
+  function initOnboarding() {
+    if (hasSeenOnboarding()) return;
+    overlay?.classList.remove('hidden');
+    // Set min date to today for checkout
+    const checkoutInput = document.getElementById('checkout-date') as HTMLInputElement | null;
+    if (checkoutInput) {
+      const today = new Date().toISOString().split('T')[0];
+      checkoutInput.min = today;
+    }
+  }
+
+  // Navigation
+  function goToSlide(index: number) {
+    currentSlide = Math.max(0, Math.min(index, totalSlides - 1));
+    carousel?.scrollTo({
+      left: currentSlide * (carousel?.clientWidth || 0),
+      behavior: 'smooth',
+    });
+    updateUI();
+  }
+
+  function updateUI() {
+    // Update indicators
+    indicators.forEach((ind, i) => {
+      ind.classList.toggle('active', i === currentSlide);
+    });
+
+    // Update prev button
+    if (prevBtn) {
+      prevBtn.classList.toggle('hidden', currentSlide === 0);
+    }
+
+    // Update next button
+    if (nextBtn) {
+      if (currentSlide === totalSlides - 1) {
+        nextBtn.classList.add('hidden');
+      } else {
+        nextBtn.classList.remove('hidden');
+      }
+    }
+
+    // Update skip button
+    if (skipBtn) {
+      skipBtn.classList.toggle('hidden', currentSlide === totalSlides - 1);
+    }
+  }
+
+  function closeOnboarding() {
+    markOnboardingShown();
+    overlay?.classList.add('hidden');
+  }
+
+  // Event listeners
+  prevBtn?.addEventListener('click', () => goToSlide(currentSlide - 1));
+  nextBtn?.addEventListener('click', () => goToSlide(currentSlide + 1));
+  skipBtn?.addEventListener('click', () => closeOnboarding());
+
+  // Indicator clicks
+  indicators.forEach((ind, i) => {
+    ind.addEventListener('click', () => goToSlide(i));
+  });
+
+  // Handle scroll-snap position detection
+  carousel?.addEventListener('scroll', () => {
+    if (!carousel) return;
+    const slideWidth = carousel.clientWidth;
+    const newSlide = Math.round(carousel.scrollLeft / slideWidth);
+    if (newSlide !== currentSlide) {
+      currentSlide = newSlide;
+      updateUI();
+    }
+  });
+
+  // Form submission
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const checkoutInput = document.getElementById('checkout-date') as HTMLInputElement | null;
+    const phoneInput = document.getElementById('phone') as HTMLInputElement | null;
+
+    const checkoutDate = checkoutInput?.value || '';
+    const phone = phoneInput?.value || '';
+
+    if (checkoutDate) {
+      // Save locally
+      saveGuestData(checkoutDate, phone);
+
+      // Send to webhook if configured
+      if (webhookUrl) {
+        await submitGuestData(webhookUrl, checkoutDate, phone);
+      }
+    }
+
+    closeOnboarding();
+  });
+
+  // Initialize with a small delay to ensure DOM is ready
+  setTimeout(initOnboarding, 100);
+</script>

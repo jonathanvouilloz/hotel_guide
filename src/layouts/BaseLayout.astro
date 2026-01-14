@@ -1,0 +1,222 @@
+---
+import '../styles/global.css';
+import { getSettings } from '../lib/content';
+import { THEME_PALETTES, type ThemeMode } from '../lib/types';
+import InstallPrompt from '../components/InstallPrompt.astro';
+import OnboardingCarousel from '../components/OnboardingCarousel.astro';
+import GoogleReviewPrompt from '../components/GoogleReviewPrompt.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  showNav?: boolean;
+}
+
+const { title, description, showNav = true } = Astro.props;
+
+const settings = await getSettings();
+
+// Normalize hex color (add # if missing)
+function normalizeColor(color: string | undefined): string | undefined {
+  if (!color) return undefined;
+  const trimmed = color.trim();
+  if (trimmed.startsWith('#')) return trimmed;
+  // Check if it looks like a hex color (3, 6, or 8 hex chars)
+  if (/^[0-9a-fA-F]{3,8}$/.test(trimmed)) return `#${trimmed}`;
+  return trimmed;
+}
+
+// Determine theme (default: dark)
+const themeMode: ThemeMode = settings.theme || 'dark';
+const palette = THEME_PALETTES[themeMode];
+
+// Custom colors if defined, otherwise use palette defaults
+const customPrimary = normalizeColor(settings.primaryColor);
+const customAccent = normalizeColor(settings.accentColor);
+
+const primaryColor = customPrimary || palette.accent;
+const primaryDark = customPrimary
+  ? `color-mix(in srgb, ${customPrimary} 80%, black)`
+  : palette.accentDark;
+const primaryGlow = customPrimary
+  ? `${customPrimary}4d`
+  : palette.accentGlow;
+const accentColor = customAccent || palette.accent;
+
+const pageTitle = title
+  ? `${title} | ${settings.hostelName}`
+  : settings.hostelName;
+
+const pageDescription = description || `Welcome to ${settings.hostelName} - Your digital guide`;
+
+// Theme color for status bar (matches background)
+const themeColor = palette.bg;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content={pageDescription} />
+
+    <!-- Theme color for BLACK theme -->
+    <meta name="theme-color" content={themeColor} />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content={settings.hostelName} />
+
+    <link rel="icon" type="image/png" href={settings.favicon || "/favicon.png"} />
+    <link rel="apple-touch-icon" href={settings.pwaIcon192 || "/images/icon-192.png"} />
+
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+    <title>{pageTitle}</title>
+
+    <!-- Dynamic theme colors from settings.json -->
+    <style set:html={`
+      :root {
+        --color-primary: ${primaryColor};
+        --color-primary-dark: ${primaryDark};
+        --color-accent: ${accentColor};
+        --color-primary-glow: ${primaryGlow};
+
+        --color-bg: ${palette.bg};
+        --color-surface: ${palette.surface};
+        --color-surface-input: ${palette.surfaceInput};
+        --color-surface-subtle: ${palette.surfaceSubtle};
+        --color-surface-hover: ${palette.surfaceHover};
+
+        --color-text: ${palette.text};
+        --color-text-secondary: ${palette.textSecondary};
+        --color-text-muted: ${palette.textMuted};
+        --color-muted: ${palette.muted};
+
+        --color-border: ${palette.border};
+        --color-border-light: ${palette.borderLight};
+        --color-separator: ${palette.separator};
+      }
+    `}></style>
+  </head>
+
+  <body class="min-h-screen antialiased overflow-x-hidden">
+    <a
+      href="#main"
+      class="sr-only sr-only-focusable fixed top-4 left-4 z-50 bg-primary px-4 py-2 rounded-lg"
+      style="color: var(--color-bg);"
+    >
+      Skip to main content
+    </a>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <!-- Onboarding Carousel -->
+    <OnboardingCarousel />
+
+    <!-- Google Review Prompt -->
+    <GoogleReviewPrompt />
+
+    <!-- PWA Install Prompt -->
+    <InstallPrompt />
+
+    {showNav && (
+      <nav data-tour="nav" class="bottom-nav">
+        <a href="/" class="nav-item" data-page="home">
+          <span class="material-symbols-outlined">home</span>
+          <span class="nav-label">Home</span>
+        </a>
+        <a href="/explore" class="nav-item" data-page="explore" data-tour="nav-explore">
+          <span class="material-symbols-outlined">explore</span>
+          <span class="nav-label">Explore</span>
+        </a>
+        <a href="/events" class="nav-item" data-page="events" data-tour="nav-events">
+          <span class="material-symbols-outlined">calendar_month</span>
+          <span class="nav-label">Events</span>
+        </a>
+        <a href="/info" class="nav-item" data-page="info">
+          <span class="material-symbols-outlined">menu_book</span>
+          <span class="nav-label">Info</span>
+        </a>
+      </nav>
+    )}
+
+    <script>
+      // Highlight active nav item based on current path
+      const currentPath = window.location.pathname;
+      const navItems = document.querySelectorAll('.nav-item');
+
+      navItems.forEach(item => {
+        const href = item.getAttribute('href');
+        const isActive = href === '/'
+          ? currentPath === '/'
+          : currentPath.startsWith(href || '');
+
+        if (isActive) {
+          item.classList.add('active');
+          const icon = item.querySelector('.material-symbols-outlined');
+          if (icon) icon.classList.add('filled');
+        }
+      });
+    </script>
+
+    <style>
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: var(--bottom-nav-height);
+        background-color: color-mix(in srgb, var(--color-bg) 95%, transparent);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-top: 1px solid var(--color-border);
+        padding-bottom: env(safe-area-inset-bottom, 0);
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.5rem 1rem;
+        color: var(--color-muted);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .nav-item:hover {
+        color: var(--color-text-secondary);
+      }
+
+      .nav-item.active {
+        color: var(--color-primary);
+      }
+
+      .nav-item .material-symbols-outlined {
+        font-size: 24px;
+      }
+
+      .nav-label {
+        font-size: 0.625rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import { getAllMarkdownActivitySlugs, getMarkdownActivityBySlug, getSettings } from '../../lib/content';
+import { getWhatsAppUrl } from '../../lib/deeplinks';
+import { marked } from 'marked';
+
+export async function getStaticPaths() {
+  const slugs = await getAllMarkdownActivitySlugs();
+
+  return slugs.map((slug) => ({
+    params: { slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const activity = await getMarkdownActivityBySlug(slug);
+const settings = await getSettings();
+
+if (!activity) {
+  return Astro.redirect('/activities');
+}
+
+const { frontmatter, content } = activity;
+
+// Parse markdown to HTML
+const contentHtml = marked.parse(content);
+
+// Build WhatsApp URL with pre-filled message
+const whatsappMessage = `Hi! I'd like to know more about "${frontmatter.title}"`;
+const whatsappUrl = getWhatsAppUrl(settings.contactWhatsApp, whatsappMessage);
+
+const hasImage = !!frontmatter.image;
+---
+
+<BaseLayout title={frontmatter.title} description={frontmatter.tagline} showNav={false}>
+  <Header
+    title={frontmatter.title}
+    showBack
+    backHref="/activities"
+    transparent={hasImage}
+  />
+
+  <div class="activity-detail pb-24">
+    <!-- Hero Image or Spacer -->
+    {hasImage ? (
+      <div class="relative h-56 w-full -mt-16">
+        <div class="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/60 to-transparent z-10 pointer-events-none"></div>
+        <div
+          class="absolute inset-0 bg-cover bg-center"
+          style={`background-image: linear-gradient(to bottom, transparent 0%, rgba(15, 23, 42, 0.6) 70%, rgba(15, 23, 42, 1) 100%), url("${frontmatter.image}");`}
+        ></div>
+      </div>
+    ) : (
+      <div class="h-4"></div>
+    )}
+
+    <!-- Content -->
+    <div class="px-4 pt-4 space-y-5">
+      <!-- Header -->
+      <header>
+        <span class="activity-badge">
+          <span class="material-symbols-outlined">hiking</span>
+          Adventure
+        </span>
+        <h1 class="text-2xl font-bold text-(--color-text) mt-3">{frontmatter.title}</h1>
+        <p class="text-base text-(--color-primary) font-medium mt-1">{frontmatter.tagline}</p>
+      </header>
+
+      <!-- Divider -->
+      <div class="h-px w-full bg-(--color-separator)"></div>
+
+      <!-- Markdown Content -->
+      <article class="prose-activity" set:html={contentHtml} />
+    </div>
+
+    <!-- Sticky WhatsApp CTA -->
+    <div class="action-bar">
+      <a
+        href={whatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-primary flex-1 touch-target"
+      >
+        <span class="material-symbols-outlined text-[20px]">chat</span>
+        <span>Ask us about this</span>
+      </a>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    background: linear-gradient(to top, var(--color-bg) 80%, transparent);
+    z-index: 40;
+  }
+
+  .activity-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+    color: var(--color-primary);
+  }
+
+  .activity-badge .material-symbols-outlined {
+    font-size: 12px;
+  }
+</style>

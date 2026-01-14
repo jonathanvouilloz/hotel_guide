@@ -1,0 +1,18 @@
+{
+  "id": "bar-crawl",
+  "title": "Bar Crawl",
+  "tagline": "Explore the best local bars with us",
+  "description": "Join fellow travelers for a guided tour of the neighborhood's hidden gem bars. We'll visit 4 unique spots, each with a free welcome drink included. Make new friends and discover places you'd never find on your own!",
+  "type": "bars",
+  "location": "Meet at Reception",
+  "lat": null,
+  "lng": null,
+  "image": null,
+  "price": "Free",
+  "cta": {
+    "type": "whatsapp",
+    "label": "Join the crawl",
+    "url": "",
+    "message": "Hi! I want to join the bar crawl"
+  }
+}

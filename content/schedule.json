@@ -1,0 +1,22 @@
+{
+  "schedule": {
+    "monday": [
+      {
+        "activityId": "cooking-class",
+        "startTime": "13:00",
+        "endTime": "18:00"
+      },
+      {
+        "activityId": "cooking-class",
+        "startTime": "18:00",
+        "endTime": "21:00"
+      }
+    ],
+    "tuesday": [],
+    "wednesday": [],
+    "thursday": [],
+    "friday": [],
+    "saturday": [],
+    "sunday": []
+  }
+}

@@ -1,0 +1,128 @@
+---
+/**
+ * WiFiCard - Essential info card with WiFi and checkout time
+ * Redesigned for BLACK theme
+ */
+interface Props {
+  networkName: string;
+  password: string;
+  checkoutTime: string;
+  roomNumber?: string;
+}
+
+const { networkName, password, checkoutTime, roomNumber } = Astro.props;
+---
+
+<div class="card-elevated overflow-hidden">
+  <!-- Header -->
+  <div class="flex items-center justify-between p-4 pb-2 border-b border-(--color-separator)">
+    <h3 class="text-(--color-text) text-base font-bold flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary" style="font-size: 16px;">wifi</span>
+      Essential Info
+    </h3>
+    {roomNumber && (
+      <span class="text-xs font-medium text-(--color-text-secondary) bg-(--color-surface-subtle) px-2 py-1 rounded-lg">
+        Room {roomNumber}
+      </span>
+    )}
+  </div>
+
+  <!-- Content -->
+  <div class="flex flex-row p-4 gap-4 items-stretch">
+    <!-- Info Column -->
+    <div class="flex-1 flex flex-col justify-between gap-4">
+      <div class="space-y-3">
+        <!-- Network -->
+        <div>
+          <p class="text-[9px] uppercase tracking-wider text-(--color-text-muted) font-medium mb-0.5">
+            Wi-Fi Network
+          </p>
+          <p class="text-(--color-text) font-semibold text-sm">{networkName}</p>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <p class="text-[9px] uppercase tracking-wider text-(--color-text-muted) font-medium mb-0.5">
+            Password
+          </p>
+          <div class="flex items-center gap-1.5">
+            <p class="wifi-password text-primary font-semibold text-sm">{password}</p>
+            <button
+              type="button"
+              class="copy-btn text-(--color-text-secondary) hover:text-(--color-text) transition-colors"
+              data-password={password}
+              aria-label="Copy password to clipboard"
+            >
+              <span class="material-symbols-outlined filled" style="font-size: 14px;">content_copy</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checkout Column -->
+    <div class="w-[100px] bg-(--color-surface-subtle) rounded-xl p-3 flex flex-col items-center justify-center gap-1 text-center">
+      <span class="material-symbols-outlined text-orange-400 text-[28px]">schedule</span>
+      <div>
+        <p class="text-[10px] text-(--color-text-secondary)">Checkout</p>
+        <p class="text-(--color-text) font-bold text-base">{checkoutTime}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Copy feedback toast -->
+<div id="copy-toast" class="copy-toast">
+  <span class="material-symbols-outlined text-[16px]">check_circle</span>
+  Copied!
+</div>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const password = btn.getAttribute('data-password');
+      const toast = document.getElementById('copy-toast');
+
+      if (!password || !toast) return;
+
+      try {
+        await navigator.clipboard.writeText(password);
+
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    });
+  });
+</script>
+
+<style>
+  .copy-toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background-color: var(--color-primary);
+    color: var(--color-bg);
+    padding: 0.75rem 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 100;
+  }
+
+  .copy-toast.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>

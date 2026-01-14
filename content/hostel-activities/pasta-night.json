@@ -1,0 +1,13 @@
+{
+  "id": "pasta-night",
+  "title": "Pasta Night",
+  "tagline": "Free dinner for everyone! BYOB",
+  "description": "Our weekly community dinner! Fresh homemade pasta served in the common room. Vegetarian and gluten-free options available. Bring your own drinks and good vibes.",
+  "type": "food",
+  "location": "Common Room",
+  "lat": null,
+  "lng": null,
+  "image": null,
+  "price": "Free",
+  "cta": null
+}

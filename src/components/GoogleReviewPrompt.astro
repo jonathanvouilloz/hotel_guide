@@ -1,0 +1,242 @@
+---
+import { getSettings } from '../lib/content';
+
+const settings = await getSettings();
+
+// Build list of review platforms
+const reviewPlatforms = [
+  {
+    name: 'Google',
+    url: settings.googleReviewUrl,
+    icon: 'star',
+    color: '#FBBF24', // Yellow/gold
+  },
+  {
+    name: 'Hostelworld',
+    url: settings.hostelworldReviewUrl,
+    icon: 'bed',
+    color: '#F97316', // Orange
+  },
+  {
+    name: 'Booking.com',
+    url: settings.bookingReviewUrl,
+    icon: 'hotel',
+    color: '#003580', // Booking blue
+  },
+].filter(p => Boolean(p.url));
+
+const hasAnyReviewUrl = reviewPlatforms.length > 0;
+---
+
+{hasAnyReviewUrl && (
+  <div id="review-prompt-overlay" class="review-overlay hidden">
+    <div class="review-modal">
+      <div class="review-content">
+        <div class="review-icon">
+          <span class="material-symbols-outlined filled">star</span>
+        </div>
+
+        <h2 class="review-title">It's your last day!</h2>
+
+        <p class="review-description">
+          We hope you enjoyed your stay. Would you mind leaving us a review?
+        </p>
+
+        <div class="review-actions">
+          {reviewPlatforms.map((platform, index) => (
+            <a
+              href={platform.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="review-btn"
+              style={`--btn-color: ${platform.color};`}
+              data-review-btn={index === 0 ? 'primary' : ''}
+            >
+              <span class="material-symbols-outlined">{platform.icon}</span>
+              {platform.name}
+            </a>
+          ))}
+
+          <button id="review-dismiss-btn" class="review-btn-secondary">
+            Maybe later
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+<style>
+  .review-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .review-overlay.hidden {
+    display: none;
+  }
+
+  .review-modal {
+    width: 100%;
+    max-width: 340px;
+    background-color: var(--color-surface);
+    border-radius: var(--radius-2xl);
+    border: 1px solid var(--color-border-light);
+    padding: 2rem 1.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .review-content {
+    text-align: center;
+  }
+
+  .review-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.25rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+  }
+
+  .review-icon .material-symbols-outlined {
+    font-size: 32px;
+    color: white;
+  }
+
+  .review-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+  }
+
+  .review-description {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+  }
+
+  .review-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .review-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-lg);
+    background-color: var(--btn-color, var(--color-primary));
+    color: white;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.1s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .review-btn:hover {
+    opacity: 0.9;
+  }
+
+  .review-btn:active {
+    transform: scale(0.98);
+  }
+
+  .review-btn .material-symbols-outlined {
+    font-size: 20px;
+  }
+
+  .review-btn-secondary {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .review-btn-secondary:hover {
+    color: var(--color-text);
+  }
+</style>
+
+<script>
+  import {
+    shouldShowReviewPrompt,
+    markReviewPromptShown,
+    hasSeenOnboarding,
+  } from '../lib/guestData';
+
+  const overlay = document.getElementById('review-prompt-overlay');
+  const reviewBtns = document.querySelectorAll('.review-btn');
+  const dismissBtn = document.getElementById('review-dismiss-btn');
+
+  function initReviewPrompt() {
+    // Only show if onboarding was completed
+    if (!hasSeenOnboarding()) return;
+
+    // Only show if it's checkout day (or after) and not already shown
+    if (!shouldShowReviewPrompt()) return;
+
+    overlay?.classList.remove('hidden');
+  }
+
+  function closePrompt() {
+    markReviewPromptShown();
+    overlay?.classList.add('hidden');
+  }
+
+  // Event listeners for all review buttons
+  reviewBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      closePrompt();
+    });
+  });
+
+  dismissBtn?.addEventListener('click', () => {
+    closePrompt();
+  });
+
+  // Close on overlay click (outside modal)
+  overlay?.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      closePrompt();
+    }
+  });
+
+  // Initialize with delay to not interfere with other modals
+  setTimeout(initReviewPrompt, 2000);
+</script>
