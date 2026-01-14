@@ -121,6 +121,7 @@ export async function getSpots(category: SpotCategory): Promise<Spot[]> {
     coordinates: spot.coordinates,
     location: spot.coordinates,
     tags: spot.tags,
+    isHotelService: spot.isHotelService,
   }));
 }
 

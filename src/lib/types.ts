@@ -198,6 +198,7 @@ export interface Spot {
   tagline?: string;
   rating?: string;
   walkingDistance?: string;
+  isHotelService?: boolean;
 }
 
 export interface SpotsFile {

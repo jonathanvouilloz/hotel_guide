@@ -16,12 +16,20 @@ const { spot, category } = Astro.props;
 // Check if spot is currently open
 const openStatus = isOpen(spot.openingHours);
 
+// Check if this is a hotel service
+const isHotelService = spot.isHotelService === true;
+
 // Get coordinates for distance calculation (client-side)
 const coords = spot.coordinates || spot.location;
 ---
 
 <a href={`/${category}/${spot.id}`} class="spot-card group" data-cuisine={spot.cuisineType || ''} data-bar-type={spot.barType || ''}>
-  <article class="relative flex flex-col overflow-hidden rounded-xl bg-(--color-surface-subtle) transition-transform active:scale-[0.99]">
+  <article
+    class:list={[
+      "relative flex flex-col overflow-hidden rounded-xl bg-(--color-surface-subtle) transition-transform active:scale-[0.99]",
+      isHotelService && "hotel-service-card"
+    ]}
+  >
     <!-- Closed overlay (full card) -->
     {openStatus === false && (
       <div class="absolute inset-0 bg-black/70 z-10 flex items-center justify-center rounded-xl">
@@ -30,6 +38,14 @@ const coords = spot.coordinates || spot.location;
     )}
     <!-- Image -->
     <div class="relative w-full h-44 overflow-hidden">
+      <!-- Hotel Service Badge -->
+      {isHotelService && (
+        <div class="hotel-service-badge absolute top-3 left-3 z-[5] flex items-center gap-1.5 rounded-lg backdrop-blur-sm px-2.5 py-1.5 shadow-lg">
+          <span class="material-symbols-outlined filled text-white" style="font-size: 14px;">home</span>
+          <span class="text-xs font-bold text-white uppercase tracking-wide">Our Place</span>
+        </div>
+      )}
+
       {spot.image ? (
         <div
           class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
@@ -94,5 +110,27 @@ const coords = spot.coordinates || spot.location;
   .spot-card {
     text-decoration: none;
     display: block;
+  }
+
+  /* Hotel Service Badge - Primary Color */
+  .hotel-service-badge {
+    background-color: var(--color-primary);
+  }
+
+  /* Hotel Service Card - Primary Border + Glow Effect */
+  .hotel-service-card {
+    border: 1px solid var(--color-primary);
+    box-shadow:
+      0 0 0 1px var(--color-primary),
+      0 0 20px var(--color-primary-glow),
+      0 0 40px color-mix(in srgb, var(--color-primary) 15%, transparent);
+  }
+
+  /* Enhanced glow on hover */
+  .spot-card:hover .hotel-service-card {
+    box-shadow:
+      0 0 0 1px var(--color-primary),
+      0 0 30px var(--color-primary-glow),
+      0 0 60px color-mix(in srgb, var(--color-primary) 20%, transparent);
   }
 </style>
