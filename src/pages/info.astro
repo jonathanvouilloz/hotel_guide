@@ -5,14 +5,26 @@ import AccordionItem from '../components/AccordionItem.astro';
 import EmergencyContacts from '../components/EmergencyContacts.astro';
 import { getSettings } from '../lib/content';
 
-// Import markdown frontmatter - PagesCMS stores content in frontmatter field
-import { frontmatter as houseRulesFm } from '../../content/house-rules.md';
-import { frontmatter as howToGetHereFm } from '../../content/how-to-get-here.md';
+// Import markdown files from TinaCMS pages folder
+// @ts-ignore - Astro handles markdown imports
+import houseRulesRaw from '../../content/pages/house-rules.md?raw';
+// @ts-ignore - Astro handles markdown imports
+import howToGetHereRaw from '../../content/pages/how-to-get-here.md?raw';
 import { marked } from 'marked';
 
+// Extract content after frontmatter (skip --- block)
+function extractContent(raw: string): string {
+  const parts = raw.split('---');
+  // If there's frontmatter, content is after the second ---
+  if (parts.length >= 3) {
+    return parts.slice(2).join('---').trim();
+  }
+  return raw;
+}
+
 // Parse markdown content to HTML
-const houseRulesHtml = marked.parse((houseRulesFm as { content?: string }).content || '');
-const howToGetHereHtml = marked.parse((howToGetHereFm as { content?: string }).content || '');
+const houseRulesHtml = marked.parse(extractContent(houseRulesRaw));
+const howToGetHereHtml = marked.parse(extractContent(howToGetHereRaw));
 
 const settings = await getSettings();
 

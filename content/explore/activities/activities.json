@@ -1,0 +1,46 @@
+{
+  "spots": [
+    {
+      "id": "yoga-classes",
+      "name": "Morning Yoga",
+      "description": "Start your day right with our sunrise yoga sessions on the rooftop.",
+      "isHotelService": true,
+      "linkedAmenityId": "yoga-classes",
+      "activityType": "Yoga",
+      "priceRange": "Free",
+      "image": "/images/explore/yoga.jpg",
+      "address": "",
+      "tags": ["morning", "free", "our-place"]
+    },
+    {
+      "id": "big-buddha",
+      "name": "Big Buddha Temple",
+      "description": "Iconic hilltop temple with stunning views. Best at sunset. Dress respectfully!",
+      "isHotelService": false,
+      "activityType": "Temple",
+      "priceRange": "Free",
+      "image": "/images/explore/big-buddha.jpg",
+      "address": "Soi Yot Sane 1, Chalong",
+      "coordinates": {
+        "lat": 7.8275,
+        "lng": 98.3126
+      },
+      "tags": ["must-see", "sunset", "viewpoint"]
+    },
+    {
+      "id": "kata-beach",
+      "name": "Kata Beach",
+      "description": "Beautiful sandy beach just 5 minutes walk. Great for swimming and surfing in low season.",
+      "isHotelService": false,
+      "activityType": "Beach",
+      "priceRange": "Free",
+      "image": "/images/explore/kata-beach.jpg",
+      "address": "Kata Beach",
+      "coordinates": {
+        "lat": 7.8207,
+        "lng": 98.2984
+      },
+      "tags": ["beach", "swimming", "surfing"]
+    }
+  ]
+}

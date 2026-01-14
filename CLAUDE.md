@@ -10,7 +10,7 @@ PWA "brochure digitale" pour hostels en Asie du Sud-Est. Les guests scannent un 
 |--------|-------------|
 | Framework | Astro (SSG) |
 | Styling | Tailwind CSS |
-| CMS | PagesCMS (édition via GitHub) |
+| CMS | TinaCMS (tina/config.ts) |
 | Hosting | Vercel |
 | PWA | manifest.json (install prompt, pas d'offline) |
 
@@ -31,7 +31,12 @@ npm run check       # Vérification TypeScript
 ## Structure du projet
 
 ```
-/content          # JSON/MD édité via PagesCMS
+/content
+  /explore        # Spots externes (restaurants, bars, etc.)
+  /services       # Amenities + Events de l'hostel
+  /settings       # Configuration globale (global.json)
+  /pages          # Pages markdown (house rules, etc.)
+/tina             # Configuration TinaCMS
 /public           # Assets statiques (images, manifest)
 /src
   /components     # Composants Astro (.astro)
@@ -102,15 +107,14 @@ getFormattedHours(spot.openingHours); // Array des 7 jours avec horaires
 
 ## État actuel
 
-**Phase** : Epic 8 (PWA Configuration) terminé
-**Dernière mise à jour** : 2026-01-10
+**Phase** : Epic 15 (Migration TinaCMS) - Phases 1-4 terminées
+**Dernière mise à jour** : 2026-01-14
 
 ### Fait
 - [x] Structure documentation créée
 - [x] PRD déplacé vers docs/
 - [x] Projet Astro initialisé avec TypeScript strict
 - [x] Tailwind CSS 4 configuré avec CSS variables
-- [x] Structure /content créée (settings, spots, events, markdown)
 - [x] Types TypeScript complets (src/lib/types.ts)
 - [x] Content loader avec typage strict (src/lib/content.ts)
 - [x] BaseLayout avec injection CSS variables dynamique
@@ -118,22 +122,23 @@ getFormattedHours(spot.openingHours); // Array des 7 jours avec horaires
 - [x] Système de theming dynamique fonctionnel
 - [x] WiFiCard avec tap-to-copy (Clipboard API + feedback)
 - [x] CategoryCard pour navigation
-- [x] Page d'accueil complète (grille 2x2 + cartes pleine largeur)
+- [x] Page d'accueil complète
 - [x] EmergencyContacts avec liens tel:
 - [x] Styles .prose pour markdown
 - [x] Page /info avec house rules, how to get here, contacts urgence
-- [x] SpotCard avec image 16:9, badges (cuisine/prix), description tronquée
+- [x] SpotCard avec image 16:9, badges, description tronquée
 - [x] Filtre cuisine intégré (URL params)
 - [x] Pages catégories : /restaurants, /laundry, /transport, /bars, /activities
-- [x] Page spot detail dynamique /spot/[id]
+- [x] Page spot detail dynamique
 - [x] Boutons sticky : Directions (Google Maps) + Copy Address
 - [x] deeplinks.ts pour URLs Maps + WhatsApp
 - [x] EventCard avec date, horaires, CTA WhatsApp
-- [x] Page /events avec événements de la semaine
 - [x] manifest.json avec icônes et metadata PWA
-- [x] Icônes PWA générées (192x192, 512x512, favicon)
+- [x] **Migration TinaCMS** : tina/config.ts, nouvelle structure content/
+- [x] **Navigation 5 éléments** : Home, Explore, WhatsApp FAB, Services, Info
+- [x] **Page /services** : amenities + events intégrés
 
-### Prochaines étapes (Epic 9 - Deploy & Polish)
-- [ ] Configurer Vercel pour le déploiement
-- [ ] Tester PWA install prompt sur mobile
-- [ ] Polish et ajustements finaux
+### Prochaines étapes (Phase 5 - Déploiement)
+- [ ] Setup Tina Cloud (app.tina.io)
+- [ ] Configurer variables Vercel (TINA_CLIENT_ID, TINA_TOKEN)
+- [ ] Test complet en production

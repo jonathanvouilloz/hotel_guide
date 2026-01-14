@@ -1,0 +1,30 @@
+{
+  "spots": [
+    {
+      "id": "laundry-service",
+      "name": "Hotel Laundry",
+      "description": "Drop off before 10am, ready by 6pm same day. 40 THB/kg.",
+      "isHotelService": true,
+      "linkedAmenityId": "laundry-service",
+      "serviceType": "Hotel Laundry",
+      "priceRange": "$",
+      "address": "",
+      "tags": ["same-day", "our-place"]
+    },
+    {
+      "id": "clean-express",
+      "name": "Clean Express Laundry",
+      "description": "Self-service machines open 24/7. Also offers dry cleaning.",
+      "isHotelService": false,
+      "serviceType": "Self-service",
+      "priceRange": "$",
+      "image": "/images/explore/laundry.jpg",
+      "address": "15 Kata Road",
+      "coordinates": {
+        "lat": 7.8205,
+        "lng": 98.2968
+      },
+      "tags": ["24h", "self-service", "dry-cleaning"]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "spots": [
+    {
+      "id": "rooftop-bar",
+      "name": "Sky Lounge",
+      "description": "Our rooftop bar with panoramic views. Happy hour 5-7pm daily!",
+      "isHotelService": true,
+      "linkedAmenityId": "rooftop-bar",
+      "barType": "Rooftop",
+      "priceRange": "$$",
+      "image": "/images/explore/sky-lounge.jpg",
+      "address": "",
+      "tags": ["happy-hour", "sunset-views", "our-place"]
+    },
+    {
+      "id": "reggae-bar",
+      "name": "Reggae Bar",
+      "description": "Chill vibes, live music on weekends, and cheap beer buckets.",
+      "isHotelService": false,
+      "barType": "Live Music",
+      "priceRange": "$",
+      "image": "/images/explore/reggae-bar.jpg",
+      "address": "78 Walking Street",
+      "coordinates": {
+        "lat": 7.8195,
+        "lng": 98.2965
+      },
+      "tags": ["live-music", "backpacker", "cheap-drinks"]
+    }
+  ]
+}

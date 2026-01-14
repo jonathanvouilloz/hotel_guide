@@ -1,0 +1,86 @@
+{
+  "amenities": [
+    {
+      "id": "swimming-pool",
+      "name": "Swimming Pool",
+      "description": "Rooftop infinity pool with stunning mountain views. Perfect for sunset drinks!",
+      "amenityType": "Pool",
+      "hours": "07:00-22:00",
+      "price": "Free for guests",
+      "location": "Rooftop (5th Floor)",
+      "image": "/images/services/pool.jpg",
+      "isHighlighted": true,
+      "tags": ["free", "popular", "towels-provided"]
+    },
+    {
+      "id": "thai-massage",
+      "name": "Traditional Thai Massage",
+      "description": "Professional massage therapists available daily. Book at reception.",
+      "amenityType": "Spa & Massage",
+      "hours": "10:00-21:00",
+      "price": "300 THB/hour",
+      "location": "Ground Floor",
+      "image": "/images/services/massage.jpg",
+      "isHighlighted": true,
+      "tags": ["reservation-required", "popular"]
+    },
+    {
+      "id": "hotel-restaurant",
+      "name": "Garden Restaurant",
+      "description": "Thai and Western cuisine. Breakfast included for all guests.",
+      "amenityType": "Restaurant",
+      "hours": "07:00-22:00",
+      "price": "Breakfast included, lunch/dinner a la carte",
+      "location": "Garden Area",
+      "image": "/images/services/restaurant.jpg",
+      "isHighlighted": false,
+      "tags": ["breakfast-included", "vegetarian-options"]
+    },
+    {
+      "id": "rooftop-bar",
+      "name": "Sky Lounge",
+      "description": "Cocktails with a view. Happy hour 5-7pm daily with 2-for-1 drinks.",
+      "amenityType": "Bar & Lounge",
+      "hours": "17:00-24:00",
+      "price": "Cocktails from 100 THB",
+      "location": "Rooftop",
+      "image": "/images/services/rooftop-bar.jpg",
+      "isHighlighted": true,
+      "tags": ["happy-hour", "sunset-views"]
+    },
+    {
+      "id": "laundry-service",
+      "name": "Laundry Service",
+      "description": "Drop off before 10am, ready by 6pm same day.",
+      "amenityType": "Laundry Service",
+      "hours": "08:00-18:00",
+      "price": "40 THB/kg",
+      "location": "Reception",
+      "isHighlighted": false,
+      "tags": ["same-day"]
+    },
+    {
+      "id": "airport-shuttle",
+      "name": "Airport Shuttle",
+      "description": "Convenient pickup and drop-off service. Book via WhatsApp at least 24h in advance.",
+      "amenityType": "Airport Shuttle",
+      "hours": "24/7",
+      "price": "400 THB/person",
+      "location": "Lobby pickup",
+      "isHighlighted": false,
+      "tags": ["book-ahead", "24h-notice"]
+    },
+    {
+      "id": "yoga-classes",
+      "name": "Morning Yoga",
+      "description": "Start your day right with sunrise yoga on the rooftop. All levels welcome.",
+      "amenityType": "Gym & Fitness",
+      "hours": "07:00-08:00 daily",
+      "price": "Free",
+      "location": "Rooftop",
+      "image": "/images/services/yoga.jpg",
+      "isHighlighted": false,
+      "tags": ["free", "morning", "all-levels"]
+    }
+  ]
+}

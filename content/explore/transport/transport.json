@@ -1,0 +1,30 @@
+{
+  "spots": [
+    {
+      "id": "airport-shuttle",
+      "name": "Airport Shuttle",
+      "description": "We offer airport pickup and drop-off. Book via WhatsApp!",
+      "isHotelService": true,
+      "linkedAmenityId": "airport-shuttle",
+      "transportType": "Airport Shuttle",
+      "priceRange": "$$",
+      "address": "",
+      "tags": ["book-ahead", "our-place"]
+    },
+    {
+      "id": "mikes-scooters",
+      "name": "Mike's Scooter Rental",
+      "description": "Reliable scooters, fair prices. 250 THB/day. International license required.",
+      "isHotelService": false,
+      "transportType": "Scooter Rental",
+      "priceRange": "$",
+      "image": "/images/explore/scooters.jpg",
+      "address": "32 Kata Road",
+      "coordinates": {
+        "lat": 7.8212,
+        "lng": 98.2971
+      },
+      "tags": ["scooter", "daily-rental", "license-required"]
+    }
+  ]
+}

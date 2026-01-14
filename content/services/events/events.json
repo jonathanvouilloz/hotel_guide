@@ -1,0 +1,48 @@
+{
+  "events": [
+    {
+      "id": "cooking-class-jan-15",
+      "title": "Thai Cooking Class",
+      "description": "Learn to make pad thai, green curry, and mango sticky rice with our chef!",
+      "date": "2025-01-15T00:00:00.000Z",
+      "time": "16:00-19:00",
+      "location": "Garden Kitchen",
+      "price": "500 THB (includes dinner)",
+      "image": "/images/services/cooking-class.jpg",
+      "cta": {
+        "label": "Join us!",
+        "type": "whatsapp",
+        "whatsappMessage": "Hi! I'd like to join the Thai Cooking Class on Wednesday Jan 15th"
+      }
+    },
+    {
+      "id": "happy-hour-daily",
+      "title": "Sunset Happy Hour",
+      "description": "2-for-1 cocktails at the rooftop bar. Best views in town!",
+      "date": "2025-01-14T00:00:00.000Z",
+      "time": "17:00-19:00",
+      "location": "Rooftop Bar",
+      "price": "Cocktails from 100 THB",
+      "image": "/images/services/happy-hour.jpg",
+      "cta": {
+        "label": "See menu",
+        "type": "link",
+        "url": "/services#rooftop-bar"
+      }
+    },
+    {
+      "id": "movie-night-friday",
+      "title": "Movie Night",
+      "description": "Classic movies on the big screen every Friday. Free popcorn!",
+      "date": "2025-01-17T00:00:00.000Z",
+      "time": "20:00",
+      "location": "Common Area",
+      "price": "Free",
+      "cta": {
+        "label": "Join us!",
+        "type": "whatsapp",
+        "whatsappMessage": "Hi! I'd like to join Movie Night on Friday"
+      }
+    }
+  ]
+}

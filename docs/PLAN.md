@@ -1,6 +1,6 @@
 # HostelGuide - Plan d'exécution
 
-> **Dernière mise à jour** : 2026-01-10
+> **Dernière mise à jour** : 2026-01-14
 
 ## Vue d'ensemble
 
@@ -14,115 +14,89 @@
 | 6 | Spot Detail | ✅ DONE | M | [06-spot-detail.md](features/06-spot-detail.md) |
 | 7 | Events Calendar | ✅ DONE | L | [07-events.md](features/07-events.md) |
 | 8 | PWA Configuration | ✅ DONE | S | [08-pwa.md](features/08-pwa.md) |
-| 9 | Deploy & Polish | ⬜ TODO | M | [09-deploy.md](features/09-deploy.md) |
-| 10 | Améliorations UX | ⬜ TODO | M | - |
-| 11 | Système de Thèmes | ⬜ TODO | M | - |
-| 12 | Contenu & Données | ⬜ TODO | M | - |
-| 13 | Build Optimization | ⬜ TODO | S | - |
-| 14 | Redesign UI | ⏸️ BLOCKED | L | - |
+| 9-14 | ~~Anciennes tâches~~ | ❌ REMPLACÉ | - | - |
+| **15** | **Migration TinaCMS** | ✅ DONE | M | [hostelguide-tinacms-migration.md](hostelguide-tinacms-migration.md) |
 
-**Légende** : ⬜ TODO | 🟡 EN COURS | ✅ DONE | ⏸️ BLOCKED
+**Légende** : ⬜ TODO | 🟡 EN COURS | ✅ DONE | ⏸️ BLOCKED | ❌ REMPLACÉ
 
 ---
 
-## Prochaines étapes prioritaires
+## Epic 15 : Migration TinaCMS
 
-### Epic 13 : Build Optimization (immédiat)
-- [ ] Créer `vercel.json` avec règles ignoreBuildStep pour images seules
-- [ ] Documenter workflow optimal PagesCMS
+> **Objectif** : Migrer de PagesCMS vers TinaCMS avec nouvelle navigation et structure contenu.
+> **Documentation complète** : [hostelguide-tinacms-migration.md](hostelguide-tinacms-migration.md)
 
-### Epic 10 : Améliorations UX
-- [ ] Créer composant `BottomNav.astro` (Home/Explore/Events/Infos)
-- [ ] Ajouter back button (←) dans `Header.astro`
-- [ ] Créer composant `InstallPrompt.astro` (modal PWA)
-- [ ] Refactorer boutons spot detail : Maps principal + Copy secondaire
-- [ ] Ajouter fonction `getMapsSearchUrl()` dans `deeplinks.ts`
+### Changements Principaux
 
-### Epic 11 : Système de Thèmes
-- [ ] Définir palettes light/dark dans `global.css`
-- [ ] Ajouter champs theme/fontFamily dans `settings.json`
-- [ ] Mettre à jour `BaseLayout.astro` pour injection thème
-- [ ] Mettre à jour `.pages.yml` pour PagesCMS
+| Aspect | Avant | Après |
+|--------|-------|-------|
+| **CMS** | PagesCMS (.pages.yml) | TinaCMS (tina/config.ts) |
+| **Bottom Nav** | 4 items | 5 items (Home, Explore, WhatsApp FAB, Services, Info) |
+| **Contenu** | /content (flat) | /content/explore + /content/services |
+| **Events** | Page /events séparée | Intégré dans /services |
 
-### Epic 12 : Contenu & Données
-- [ ] Créer dossier `public/images/defaults/` (5 images à fournir)
-- [ ] Implémenter logique fallback dans `SpotCard.astro`
-- [ ] Nouveau type `OpeningHours` dans `types.ts`
-- [ ] Créer composant `OpeningHours.astro`
-- [ ] Migrer structure horaires dans spots JSON
+### Phase 1: Setup TinaCMS ✅
+- [x] Installer TinaCMS (`npx @tinacms/cli@latest init`)
+- [x] Supprimer `.pages.yml`
+- [x] Créer `tina/config.ts` avec schema complet
+- [x] Mettre à jour scripts package.json
+- [x] Créer structure content/ (explore/, services/, settings/, pages/)
+- [x] Ajouter données exemples
 
-### Epic 14 : Redesign UI (BLOCKED - en attente mockups)
-- [ ] Recevoir nouveaux mockups
-- [ ] Implémenter redesign complet
+### Phase 2: Navigation 5 éléments ✅
+- [x] Modifier BaseLayout.astro (bottom nav 5 items)
+- [x] Implémenter WhatsApp FAB central (surélevé, action directe)
+- [x] Supprimer page /events
 
----
+### Phase 3: Pages Services ✅
+- [x] Créer /services avec amenities + events
+- [x] Modifier /explore pour supporter isHotelService
+- [x] Adapter SpotCard pour badge "Our Place"
 
-## Dépendances entre epics
+### Phase 4: Types et Content Loader ✅
+- [x] Ajouter types Amenity, HotelEvent
+- [x] Modifier content.ts pour nouvelle structure
+- [x] Tester chargement données
 
-```
-[1-8 DONE] ──> [13. Build Opt] ──> [9. Deploy]
-     │
-     └──> [10. UX] ──> [11. Thèmes] ──> [14. Redesign UI]
-     │                      │                    ↑
-     └──> [12. Contenu] ────┘          (BLOCKED: mockups)
-```
+### Phase 5: Déploiement
+- [ ] Setup Tina Cloud (app.tina.io)
+- [ ] Configurer variables Vercel (TINA_CLIENT_ID, TINA_TOKEN)
+- [ ] Test complet en production
 
 ---
 
 ## Progression globale
 
 ```
-[████████████░░░░░░░░] 57% (8/14 epics)
+[██████████████████░░] 90% (9/10 epics terminés - reste déploiement Tina Cloud)
 ```
-
-**Note** : Epic 14 (Redesign UI) est bloqué en attente des nouveaux mockups.
-
----
-
-## Assets à fournir par l'utilisateur
-
-### Images par défaut (pour spots sans photo)
-
-| Catégorie | Fichier attendu | Dimensions | Format |
-|-----------|-----------------|------------|--------|
-| Restaurants | `public/images/defaults/restaurants.jpg` | 800x450 (16:9) | JPG/WebP |
-| Bars | `public/images/defaults/bars.jpg` | 800x450 (16:9) | JPG/WebP |
-| Laundry | `public/images/defaults/laundry.jpg` | 800x450 (16:9) | JPG/WebP |
-| Transport | `public/images/defaults/transport.jpg` | 800x450 (16:9) | JPG/WebP |
-| Activities | `public/images/defaults/activities.jpg` | 800x450 (16:9) | JPG/WebP |
-
-**Style** : Illustrations flat design cohérentes entre elles
-
----
-
-## Décisions design à prendre (avant Epic 11/14)
-
-### Palette de couleurs
-- [ ] **Primary color** : Couleur principale (boutons, header, liens)
-- [ ] **Accent color** : Couleur secondaire (badges, highlights)
-- [ ] **Background light** : Fond du thème clair
-- [ ] **Background dark** : Fond du thème sombre
-- [ ] **Text colors** : Couleurs de texte pour chaque thème
-
-### Typographie
-- [ ] **Font principale** : Quelle police ? (Inter, System, Poppins, etc.)
-- [ ] **Font secondaire** : Si différente pour les titres
-
-### Thème par défaut
-- [ ] **Light ou Dark** : Quel thème par défaut pour l'app ?
-
-### Nouveaux mockups
-- [ ] **Home** : Layout page d'accueil
-- [ ] **Explore/Spots** : Liste des spots
-- [ ] **Spot detail** : Page détail d'un spot
-- [ ] **Events** : Liste des événements
-- [ ] **Info** : Page informations pratiques
-
-> **Action** : Fournir les mockups finaux et les choix de couleurs/fonts avant de commencer Epic 11.
 
 ---
 
 ## Notes de session
+
+### 2026-01-14
+- **Migration TinaCMS terminée en local** (Epic 15 - Phases 1-4)
+  - TinaCMS installé et configuré (`tina/config.ts`)
+  - `.pages.yml` supprimé
+  - Nouvelle structure content/ : explore/, services/, settings/, pages/
+  - Navigation 5 éléments avec WhatsApp FAB central
+  - Page /services créée (amenities + events)
+  - Types et content loader mis à jour
+  - **Reste à faire** : Phase 5 (déploiement Tina Cloud + Vercel)
+- **Amélioration Bottom Bar** :
+  - Labels texte supprimés (icônes seules)
+  - Icône Explore : `explore` → `menu_book`
+  - Icône Info : `menu_book` → `info_i`
+  - Hauteur réduite : 80px → 68px (-15%)
+- Décisions précédentes :
+  - Nouvelle navigation : 5 éléments avec WhatsApp FAB central
+  - Nouvelle structure contenu : Explore (externe) vs Services (interne)
+  - Pattern isHotelService pour cross-linking spots/services
+  - Events intégrés dans page Services (suppression /events)
+  - Pages catégories (/restaurants, /bars, etc.) conservées
+  - Données exemples utilisées (owner remplira le vrai contenu)
+- **6 nouvelles décisions documentées** dans DECISIONS.md
 
 ### 2026-01-10
 - Projet initialisé

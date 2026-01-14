@@ -1,17 +1,25 @@
 import type {
   Settings,
+  TinaSettings,
   Spot,
   SpotCategory,
   CategoryMeta,
   Activity,
-  ScheduleFile,
   ScheduleDay,
   ScheduleSlot,
   SpecialEvent,
-  SpecialEventsFile,
   ScheduledEvent,
   MarkdownActivity,
-  MarkdownActivityFrontmatter,
+  Amenity,
+  AmenitiesFile,
+  HotelEvent,
+  HotelEventsFile,
+  ExploreSpot,
+  ExploreSpotsFile,
+  ExploreCategory,
+  CuisineType,
+  BarType,
+  PriceRange,
 } from './types';
 
 // ============================================
@@ -45,7 +53,7 @@ function slugify(text: string): string {
 }
 
 // ============================================
-// Settings
+// Settings (TinaCMS structure)
 // ============================================
 
 let cachedSettings: Settings | null = null;
@@ -55,39 +63,64 @@ export async function getSettings(): Promise<Settings> {
     return cachedSettings;
   }
 
-  const data = await import('../../content/settings.json');
-  cachedSettings = data.default as Settings;
+  // Load TinaCMS settings
+  const tinaData = await import('../../content/settings/global.json');
+  const data = tinaData.default as TinaSettings;
+
+  // Convert TinaCMS settings to legacy format for compatibility
+  cachedSettings = {
+    hostelName: data.hostelName,
+    logo: data.logo || '/images/logo.png',
+    primaryColor: data.branding?.primaryColor,
+    accentColor: data.branding?.accentColor,
+    wifi: {
+      name: data.wifi?.networkName || '',
+      password: data.wifi?.password || '',
+    },
+    checkIn: data.checkTimes?.checkIn || '14:00',
+    checkOut: data.checkTimes?.checkOut || '11:00',
+    contactWhatsApp: data.contacts?.whatsapp || '',
+    whatsapp: data.contacts?.whatsapp,
+    contacts: data.contacts,
+    emergencyContacts: [
+      ...(data.contacts?.emergencyLocal ? [{ name: 'Tourist Police', phone: data.contacts.emergencyLocal }] : []),
+      ...(data.contacts?.emergencyAmbulance ? [{ name: 'Ambulance', phone: data.contacts.emergencyAmbulance }] : []),
+    ],
+    timezone: data.timezone || 'Asia/Bangkok',
+  };
+
   return cachedSettings;
 }
 
 // ============================================
-// Spots
+// Spots (Legacy - redirects to TinaCMS Explore)
 // ============================================
 
 export async function getSpots(category: SpotCategory): Promise<Spot[]> {
-  let rawData: unknown;
+  // Map legacy categories to new explore categories
+  const categoryMap: Record<SpotCategory, ExploreCategory> = {
+    'restaurants': 'restaurants',
+    'services': 'laundry', // Old "services" was external laundry/services
+    'transport': 'transport',
+    'bars': 'bars',
+  };
 
-  switch (category) {
-    case 'restaurants':
-      rawData = (await import('../../content/spots/restaurants.json')).default;
-      break;
-    case 'services':
-      rawData = (await import('../../content/spots/services.json')).default;
-      break;
-    case 'transport':
-      rawData = (await import('../../content/spots/transport.json')).default;
-      break;
-    case 'bars':
-      rawData = (await import('../../content/spots/bars.json')).default;
-      break;
-  }
+  const exploreCategory = categoryMap[category];
+  const exploreSpots = await getExploreSpots(exploreCategory);
 
-  const data = rawData as { spots: Spot[] };
-
-  // Auto-generate IDs from name if not provided
-  return data.spots.map((spot) => ({
-    ...spot,
-    id: spot.id || slugify(spot.name),
+  // Convert ExploreSpot to legacy Spot format
+  return exploreSpots.map((spot) => ({
+    id: spot.id,
+    name: spot.name,
+    description: spot.description || '',
+    cuisineType: spot.cuisineType as CuisineType | undefined,
+    barType: spot.barType as BarType | undefined,
+    priceRange: spot.priceRange as PriceRange | undefined,
+    image: spot.image,
+    address: spot.address,
+    coordinates: spot.coordinates,
+    location: spot.coordinates,
+    tags: spot.tags,
   }));
 }
 
@@ -131,26 +164,13 @@ export async function findSpotById(
 }
 
 // ============================================
-// Activities (Recurring library)
+// Activities (Legacy - now using TinaCMS events)
 // ============================================
 
 export async function getActivities(): Promise<Activity[]> {
-  // Read individual activity files from hostel-activities folder
-  const activityFiles = import.meta.glob<{ default: Activity }>(
-    '../../content/hostel-activities/*.json',
-    { eager: true }
-  );
-
-  // Use Map to deduplicate by ID
-  const activitiesMap = new Map<string, Activity>();
-
-  for (const path in activityFiles) {
-    const activity = activityFiles[path].default;
-    const id = activity.id || slugify(activity.title);
-    activitiesMap.set(id, { ...activity, id });
-  }
-
-  return Array.from(activitiesMap.values());
+  // Legacy function - returns empty array
+  // Use getHotelEvents() instead for TinaCMS structure
+  return [];
 }
 
 export async function getActivityById(id: string): Promise<Activity | undefined> {
@@ -159,27 +179,31 @@ export async function getActivityById(id: string): Promise<Activity | undefined>
 }
 
 // ============================================
-// Schedule (Weekly recurring)
+// Schedule (Legacy - now using TinaCMS events)
 // ============================================
 
 export async function getSchedule(): Promise<Record<ScheduleDay, ScheduleSlot[]>> {
-  const data = await import('../../content/schedule.json');
-  const file = data.default as ScheduleFile;
-  return file.schedule;
+  // Legacy function - returns empty schedule
+  // Use getHotelEvents() instead for TinaCMS structure
+  return {
+    monday: [],
+    tuesday: [],
+    wednesday: [],
+    thursday: [],
+    friday: [],
+    saturday: [],
+    sunday: [],
+  };
 }
 
 // ============================================
-// Special Events (One-off dated)
+// Special Events (Legacy - now using TinaCMS events)
 // ============================================
 
 export async function getSpecialEvents(): Promise<SpecialEvent[]> {
-  const data = await import('../../content/special-events.json');
-  const file = data.default as SpecialEventsFile;
-
-  return file.events.map((event) => ({
-    ...event,
-    id: event.id || slugify(event.title),
-  }));
+  // Legacy function - returns empty array
+  // Use getHotelEvents() instead for TinaCMS structure
+  return [];
 }
 
 export async function getSpecialEventById(id: string): Promise<SpecialEvent | undefined> {
@@ -385,41 +409,13 @@ export async function getAllScheduledEventIds(): Promise<string[]> {
 }
 
 // ============================================
-// Markdown Activities (Inspirational Content)
+// Markdown Activities (Legacy - content moved to TinaCMS)
 // ============================================
 
-let cachedMarkdownActivities: MarkdownActivity[] | null = null;
-
 export async function getMarkdownActivities(): Promise<MarkdownActivity[]> {
-  if (cachedMarkdownActivities) {
-    return cachedMarkdownActivities;
-  }
-
-  // Use Astro's glob to import all .md files from /content/activities/
-  const activityFiles = import.meta.glob<{
-    frontmatter: MarkdownActivityFrontmatter;
-    rawContent: () => string;
-  }>('../../content/activities/*.md', { eager: true });
-
-  const activities: MarkdownActivity[] = [];
-
-  for (const [path, module] of Object.entries(activityFiles)) {
-    // Extract slug from path: ../../content/activities/elephant-park.md -> elephant-park
-    const slug = path.split('/').pop()?.replace('.md', '') || '';
-
-    activities.push({
-      slug,
-      frontmatter: module.frontmatter,
-      content: module.rawContent(),
-    });
-  }
-
-  // Sort by order field (default to 999 if not specified)
-  cachedMarkdownActivities = activities.sort(
-    (a, b) => (a.frontmatter.order ?? 999) - (b.frontmatter.order ?? 999)
-  );
-
-  return cachedMarkdownActivities;
+  // Legacy function - returns empty array
+  // Markdown activities have been removed in TinaCMS migration
+  return [];
 }
 
 export async function getMarkdownActivityBySlug(
@@ -467,4 +463,184 @@ export const CATEGORIES: CategoryMeta[] = [
 
 export function getCategoryMeta(slug: SpotCategory): CategoryMeta | undefined {
   return CATEGORIES.find((cat) => cat.slug === slug);
+}
+
+// ============================================
+// TinaCMS Amenities (Hotel Services)
+// ============================================
+
+let cachedAmenities: Amenity[] | null = null;
+
+export async function getAmenities(): Promise<Amenity[]> {
+  if (cachedAmenities) {
+    return cachedAmenities;
+  }
+
+  try {
+    const data = await import('../../content/services/amenities/amenities.json');
+    const file = data.default as AmenitiesFile;
+    cachedAmenities = file.amenities.map((amenity) => ({
+      ...amenity,
+      id: amenity.id || slugify(amenity.name),
+    }));
+    return cachedAmenities;
+  } catch {
+    return [];
+  }
+}
+
+export async function getAmenityById(id: string): Promise<Amenity | undefined> {
+  const amenities = await getAmenities();
+  return amenities.find((a) => a.id === id);
+}
+
+export async function getHighlightedAmenities(): Promise<Amenity[]> {
+  const amenities = await getAmenities();
+  return amenities.filter((a) => a.isHighlighted);
+}
+
+// ============================================
+// TinaCMS Hotel Events
+// ============================================
+
+let cachedHotelEvents: HotelEvent[] | null = null;
+
+export async function getHotelEvents(): Promise<HotelEvent[]> {
+  if (cachedHotelEvents) {
+    return cachedHotelEvents;
+  }
+
+  try {
+    const data = await import('../../content/services/events/events.json');
+    const file = data.default as HotelEventsFile;
+    cachedHotelEvents = file.events.map((event) => ({
+      ...event,
+      id: event.id || slugify(event.title),
+    }));
+    return cachedHotelEvents;
+  } catch {
+    return [];
+  }
+}
+
+export async function getUpcomingHotelEvents(days: number = 7): Promise<HotelEvent[]> {
+  const events = await getHotelEvents();
+  const now = new Date();
+  const cutoff = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
+
+  return events
+    .filter((event) => {
+      const eventDate = new Date(event.date);
+      return eventDate >= now && eventDate <= cutoff;
+    })
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+}
+
+// ============================================
+// TinaCMS Explore Spots (External)
+// ============================================
+
+export async function getExploreSpots(category: ExploreCategory): Promise<ExploreSpot[]> {
+  let rawData: unknown;
+
+  try {
+    switch (category) {
+      case 'restaurants':
+        rawData = (await import('../../content/explore/restaurants/restaurants.json')).default;
+        break;
+      case 'bars':
+        rawData = (await import('../../content/explore/bars/bars.json')).default;
+        break;
+      case 'activities':
+        rawData = (await import('../../content/explore/activities/activities.json')).default;
+        break;
+      case 'transport':
+        rawData = (await import('../../content/explore/transport/transport.json')).default;
+        break;
+      case 'laundry':
+        rawData = (await import('../../content/explore/laundry/laundry.json')).default;
+        break;
+    }
+  } catch {
+    return [];
+  }
+
+  const data = rawData as ExploreSpotsFile;
+
+  // Auto-generate IDs and sort (hotel services first)
+  return data.spots
+    .map((spot) => ({
+      ...spot,
+      id: spot.id || slugify(spot.name),
+    }))
+    .sort((a, b) => {
+      if (a.isHotelService && !b.isHotelService) return -1;
+      if (!a.isHotelService && b.isHotelService) return 1;
+      return a.name.localeCompare(b.name);
+    });
+}
+
+export async function getExploreSpotById(
+  category: ExploreCategory,
+  id: string
+): Promise<ExploreSpot | undefined> {
+  const spots = await getExploreSpots(category);
+  return spots.find((spot) => spot.id === id);
+}
+
+export async function findExploreSpotById(
+  id: string
+): Promise<{ spot: ExploreSpot; category: ExploreCategory } | undefined> {
+  const categories: ExploreCategory[] = ['restaurants', 'bars', 'activities', 'transport', 'laundry'];
+
+  for (const category of categories) {
+    const spots = await getExploreSpots(category);
+    const spot = spots.find((s) => s.id === id);
+    if (spot) {
+      return { spot, category };
+    }
+  }
+
+  return undefined;
+}
+
+// ============================================
+// Explore Category Metadata
+// ============================================
+
+export const EXPLORE_CATEGORIES: { slug: ExploreCategory; name: string; emoji: string; description: string }[] = [
+  {
+    slug: 'restaurants',
+    name: 'Restaurants',
+    emoji: '🍜',
+    description: 'Local restaurants and cafes',
+  },
+  {
+    slug: 'bars',
+    name: 'Bars',
+    emoji: '🍺',
+    description: 'Bars and nightlife',
+  },
+  {
+    slug: 'activities',
+    name: 'Activities',
+    emoji: '🎯',
+    description: 'Things to do nearby',
+  },
+  {
+    slug: 'transport',
+    name: 'Transport',
+    emoji: '🛵',
+    description: 'Getting around',
+  },
+  {
+    slug: 'laundry',
+    name: 'Laundry',
+    emoji: '🧺',
+    description: 'Laundry services',
+  },
+];
+
+export function getExploreCategoryMeta(slug: ExploreCategory) {
+  return EXPLORE_CATEGORIES.find((cat) => cat.slug === slug);
 }

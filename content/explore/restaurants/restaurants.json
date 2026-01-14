@@ -1,0 +1,31 @@
+{
+  "spots": [
+    {
+      "id": "hotel-restaurant",
+      "name": "Garden Restaurant",
+      "description": "Our in-house restaurant serving Thai and Western cuisine. Breakfast included for all guests!",
+      "isHotelService": true,
+      "linkedAmenityId": "hotel-restaurant",
+      "cuisineType": "International",
+      "priceRange": "$$",
+      "image": "/images/explore/garden-restaurant.jpg",
+      "address": "",
+      "tags": ["breakfast-included", "vegetarian-options", "our-place"]
+    },
+    {
+      "id": "pad-thai-corner",
+      "name": "Pad Thai Corner",
+      "description": "Best pad thai in town! Family-run spot with authentic recipes. Try the crab fried rice too.",
+      "isHotelService": false,
+      "cuisineType": "Thai",
+      "priceRange": "$",
+      "image": "/images/explore/pad-thai-corner.jpg",
+      "address": "45 Beach Road, Kata",
+      "coordinates": {
+        "lat": 7.8208,
+        "lng": 98.2978
+      },
+      "tags": ["local favorite", "cash only", "lunch"]
+    }
+  ]
+}

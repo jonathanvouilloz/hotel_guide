@@ -1,43 +1,192 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
-import SpotCard from '../components/SpotCard.astro';
-import { getSpots } from '../lib/content';
+import { getAmenities, getUpcomingHotelEvents, getSettings } from '../lib/content';
+import { getWhatsAppUrl } from '../lib/deeplinks';
+import type { Amenity, HotelEvent } from '../lib/types';
 
-const spots = await getSpots('services');
+const amenities = await getAmenities();
+const events = await getUpcomingHotelEvents(14);
+const settings = await getSettings();
+
+// Format event date
+function formatEventDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  if (date.toDateString() === today.toDateString()) {
+    return 'Today';
+  }
+  if (date.toDateString() === tomorrow.toDateString()) {
+    return 'Tomorrow';
+  }
+
+  return date.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
+// Get WhatsApp URL for event CTA
+function getEventCTAUrl(event: HotelEvent): string | null {
+  if (!event.cta) return null;
+
+  if (event.cta.type === 'whatsapp') {
+    const whatsappNumber = settings.contacts?.whatsapp || settings.contactWhatsApp || '';
+    return getWhatsAppUrl(whatsappNumber, event.cta.whatsappMessage || '');
+  }
+
+  if (event.cta.type === 'link' && event.cta.url) {
+    return event.cta.url;
+  }
+
+  return null;
+}
 ---
 
 <BaseLayout title="Services">
-  <Header title="Services" showBack backHref="/explore" />
+  <Header title="Our Services" showBack backHref="/" />
 
-  <main class="flex flex-col gap-5 px-4 pt-4 pb-4">
-    <!-- Hero Text -->
-    <div class="py-2">
-      <h2 class="text-2xl font-extrabold text-(--color-text) leading-tight">
-        Services
-        <br />
-        <span class="text-(--color-text-secondary) font-medium text-lg">
-          Useful services nearby.
-        </span>
-      </h2>
-    </div>
+  <main class="flex flex-col gap-6 px-4 pt-4 pb-24">
+    <!-- Amenities Section -->
+    <section>
+      <h2 class="text-xl font-bold text-(--color-text) mb-4">Hotel Amenities</h2>
 
-    <!-- Spots List -->
-    {spots.length > 0 ? (
-      <div class="space-y-4">
-        {spots.map(spot => (
-          <SpotCard spot={spot} category="services" />
-        ))}
-      </div>
-    ) : (
-      <div class="card p-6 text-center">
-        <p class="text-(--color-text-secondary)">No services listed yet.</p>
-      </div>
+      {amenities.length > 0 ? (
+        <div class="space-y-3">
+          {amenities.map((amenity: Amenity) => (
+            <a
+              href={`#${amenity.id}`}
+              id={amenity.id}
+              class="block card p-4 hover:bg-(--color-surface-hover) transition-colors"
+            >
+              <div class="flex gap-4">
+                {amenity.image && (
+                  <img
+                    src={amenity.image}
+                    alt={amenity.name}
+                    class="w-20 h-20 rounded-lg object-cover shrink-0"
+                  />
+                )}
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-(--color-text) truncate">{amenity.name}</h3>
+                  {amenity.amenityType && (
+                    <span class="text-xs text-(--color-text-muted) uppercase tracking-wide">
+                      {amenity.amenityType}
+                    </span>
+                  )}
+                  {amenity.description && (
+                    <p class="text-sm text-(--color-text-secondary) mt-1 line-clamp-2">
+                      {amenity.description}
+                    </p>
+                  )}
+                  <div class="flex flex-wrap gap-2 mt-2 text-xs text-(--color-text-muted)">
+                    {amenity.hours && (
+                      <span class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm">schedule</span>
+                        {amenity.hours}
+                      </span>
+                    )}
+                    {amenity.price && (
+                      <span class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm">payments</span>
+                        {amenity.price}
+                      </span>
+                    )}
+                    {amenity.location && (
+                      <span class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm">location_on</span>
+                        {amenity.location}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="card p-6 text-center">
+          <p class="text-(--color-text-secondary)">No amenities listed yet.</p>
+        </div>
+      )}
+    </section>
+
+    <!-- Events Section -->
+    {events.length > 0 && (
+      <section>
+        <h2 class="text-xl font-bold text-(--color-text) mb-4">This Week</h2>
+
+        <div class="space-y-3">
+          {events.map((event: HotelEvent) => {
+            const ctaUrl = getEventCTAUrl(event);
+            return (
+              <div class="card p-4">
+                <div class="flex gap-4">
+                  {event.image && (
+                    <img
+                      src={event.image}
+                      alt={event.title}
+                      class="w-20 h-20 rounded-lg object-cover shrink-0"
+                    />
+                  )}
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between gap-2">
+                      <div>
+                        <span class="text-xs font-medium text-(--color-primary) uppercase tracking-wide">
+                          {formatEventDate(event.date)}
+                        </span>
+                        <h3 class="font-semibold text-(--color-text)">{event.title}</h3>
+                      </div>
+                    </div>
+                    {event.description && (
+                      <p class="text-sm text-(--color-text-secondary) mt-1 line-clamp-2">
+                        {event.description}
+                      </p>
+                    )}
+                    <div class="flex flex-wrap gap-2 mt-2 text-xs text-(--color-text-muted)">
+                      {event.time && (
+                        <span class="flex items-center gap-1">
+                          <span class="material-symbols-outlined text-sm">schedule</span>
+                          {event.time}
+                        </span>
+                      )}
+                      {event.location && (
+                        <span class="flex items-center gap-1">
+                          <span class="material-symbols-outlined text-sm">location_on</span>
+                          {event.location}
+                        </span>
+                      )}
+                      {event.price && (
+                        <span class="flex items-center gap-1">
+                          <span class="material-symbols-outlined text-sm">payments</span>
+                          {event.price}
+                        </span>
+                      )}
+                    </div>
+                    {ctaUrl && event.cta?.label && (
+                      <a
+                        href={ctaUrl}
+                        target={event.cta.type === 'whatsapp' ? '_blank' : undefined}
+                        rel={event.cta.type === 'whatsapp' ? 'noopener noreferrer' : undefined}
+                        class="inline-flex items-center gap-1 mt-3 px-3 py-1.5 text-sm font-medium bg-(--color-primary) text-white rounded-lg hover:bg-(--color-primary-dark) transition-colors"
+                      >
+                        {event.cta.label}
+                        {event.cta.type === 'whatsapp' && (
+                          <span class="material-symbols-outlined text-sm">open_in_new</span>
+                        )}
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
     )}
   </main>
 </BaseLayout>
-
-<script>
-  import { initDistanceDisplay } from '../lib/geolocation';
-  initDistanceDisplay();
-</script>

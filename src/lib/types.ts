@@ -80,6 +80,31 @@ export interface CategoryImages {
   bars?: string;
 }
 
+// TinaCMS Settings Structure
+export interface TinaSettings {
+  hostelName: string;
+  logo?: string;
+  branding?: {
+    primaryColor?: string;
+    accentColor?: string;
+  };
+  wifi?: {
+    networkName: string;
+    password: string;
+  };
+  checkTimes?: {
+    checkIn?: string;
+    checkOut?: string;
+  };
+  contacts?: {
+    whatsapp?: string;
+    emergencyLocal?: string;
+    emergencyAmbulance?: string;
+  };
+  timezone?: string;
+}
+
+// Legacy Settings (backward compatibility)
 export interface Settings {
   hostelName: string;
   logo: string;
@@ -90,6 +115,8 @@ export interface Settings {
   checkIn: string;
   checkOut: string;
   contactWhatsApp: string;
+  whatsapp?: string; // TinaCMS compatibility
+  contacts?: TinaSettings['contacts']; // TinaCMS compatibility
   emergencyContacts: EmergencyContact[];
   timezone: string;
   heroImage?: string;
@@ -301,3 +328,99 @@ export interface CategoryMeta {
   emoji: string;
   description: string;
 }
+
+// ============================================
+// TinaCMS Amenity Types (Hotel Services)
+// ============================================
+
+export type AmenityType =
+  | 'Pool'
+  | 'Spa & Massage'
+  | 'Gym & Fitness'
+  | 'Restaurant'
+  | 'Bar & Lounge'
+  | 'Rooftop'
+  | 'Laundry Service'
+  | 'Airport Shuttle'
+  | 'Bike Rental'
+  | 'Scooter Rental'
+  | 'Tour Desk'
+  | 'Coworking Space'
+  | 'Kitchen'
+  | 'Common Area'
+  | 'Garden'
+  | 'Parking'
+  | 'Other';
+
+export interface Amenity {
+  id: string;
+  name: string;
+  description?: string;
+  amenityType?: AmenityType;
+  hours?: string;
+  price?: string;
+  location?: string;
+  image?: string;
+  details?: string; // Rich text
+  isHighlighted?: boolean;
+  tags?: string[];
+}
+
+export interface AmenitiesFile {
+  amenities: Amenity[];
+}
+
+// ============================================
+// TinaCMS Hotel Event Types
+// ============================================
+
+export interface HotelEventCTA {
+  label?: string;
+  type?: 'whatsapp' | 'link';
+  whatsappMessage?: string;
+  url?: string;
+}
+
+export interface HotelEvent {
+  id: string;
+  title: string;
+  description?: string;
+  date: string; // ISO date
+  time?: string;
+  location?: string;
+  price?: string;
+  image?: string;
+  cta?: HotelEventCTA;
+}
+
+export interface HotelEventsFile {
+  events: HotelEvent[];
+}
+
+// ============================================
+// TinaCMS Explore Spot Types (External spots)
+// ============================================
+
+export interface ExploreSpot {
+  id: string;
+  name: string;
+  description?: string;
+  isHotelService?: boolean;
+  linkedAmenityId?: string;
+  cuisineType?: string;
+  barType?: string;
+  activityType?: string;
+  serviceType?: string;
+  transportType?: string;
+  priceRange?: string;
+  image?: string;
+  address?: string;
+  coordinates?: Coordinates;
+  tags?: string[];
+}
+
+export interface ExploreSpotsFile {
+  spots: ExploreSpot[];
+}
+
+export type ExploreCategory = 'restaurants' | 'bars' | 'activities' | 'transport' | 'laundry';

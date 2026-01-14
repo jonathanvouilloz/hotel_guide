@@ -1,0 +1,183 @@
+fragment SettingsParts on Settings {
+  __typename
+  hostelName
+  logo
+  branding {
+    __typename
+    primaryColor
+    accentColor
+  }
+  wifi {
+    __typename
+    networkName
+    password
+  }
+  checkTimes {
+    __typename
+    checkIn
+    checkOut
+  }
+  contacts {
+    __typename
+    whatsapp
+    emergencyLocal
+    emergencyAmbulance
+  }
+  timezone
+}
+
+fragment PagesParts on Pages {
+  __typename
+  title
+  body
+}
+
+fragment RestaurantsParts on Restaurants {
+  __typename
+  spots {
+    __typename
+    id
+    name
+    description
+    isHotelService
+    linkedAmenityId
+    cuisineType
+    priceRange
+    image
+    address
+    coordinates {
+      __typename
+      lat
+      lng
+    }
+    tags
+  }
+}
+
+fragment LaundryParts on Laundry {
+  __typename
+  spots {
+    __typename
+    id
+    name
+    description
+    isHotelService
+    linkedAmenityId
+    serviceType
+    priceRange
+    image
+    address
+    coordinates {
+      __typename
+      lat
+      lng
+    }
+    tags
+  }
+}
+
+fragment TransportParts on Transport {
+  __typename
+  spots {
+    __typename
+    id
+    name
+    description
+    isHotelService
+    linkedAmenityId
+    transportType
+    priceRange
+    image
+    address
+    coordinates {
+      __typename
+      lat
+      lng
+    }
+    tags
+  }
+}
+
+fragment BarsParts on Bars {
+  __typename
+  spots {
+    __typename
+    id
+    name
+    description
+    isHotelService
+    linkedAmenityId
+    barType
+    priceRange
+    image
+    address
+    coordinates {
+      __typename
+      lat
+      lng
+    }
+    tags
+  }
+}
+
+fragment ActivitiesParts on Activities {
+  __typename
+  spots {
+    __typename
+    id
+    name
+    description
+    isHotelService
+    linkedAmenityId
+    activityType
+    priceRange
+    image
+    address
+    coordinates {
+      __typename
+      lat
+      lng
+    }
+    tags
+  }
+}
+
+fragment AmenitiesParts on Amenities {
+  __typename
+  amenities {
+    __typename
+    id
+    name
+    description
+    amenityType
+    hours
+    price
+    location
+    image
+    details
+    isHighlighted
+    tags
+  }
+}
+
+fragment EventsParts on Events {
+  __typename
+  events {
+    __typename
+    id
+    title
+    description
+    date
+    time
+    location
+    price
+    image
+    cta {
+      __typename
+      label
+      type
+      whatsappMessage
+      url
+    }
+  }
+}

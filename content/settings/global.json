@@ -1,0 +1,22 @@
+{
+  "hostelName": "Jon's House",
+  "logo": "/images/logo.png",
+  "branding": {
+    "primaryColor": "#008080",
+    "accentColor": "#FF6B6B"
+  },
+  "wifi": {
+    "networkName": "YourHostel_WiFi",
+    "password": "welcome123"
+  },
+  "checkTimes": {
+    "checkIn": "14:00",
+    "checkOut": "11:00"
+  },
+  "contacts": {
+    "whatsapp": "+66812345678",
+    "emergencyLocal": "Tourist Police: 1155",
+    "emergencyAmbulance": "1669"
+  },
+  "timezone": "Asia/Bangkok"
+}

@@ -332,6 +332,132 @@
 
 ---
 
+### 2026-01-14 | CMS : PagesCMS → TinaCMS
+
+**Contexte** : PagesCMS ne répond plus aux besoins (UI basique, pas de visual editing, maintenance incertaine).
+
+**Décision** : Migrer vers TinaCMS.
+
+**Justification** :
+- UI moderne et professionnelle pour l'owner
+- Visual editing (prévisualisation temps réel)
+- SSG natif, compatible Astro
+- Tina Cloud gère OAuth
+- Free tier suffisant (2 users)
+- Schema TypeScript typé
+
+**Alternatives rejetées** :
+- Rester sur PagesCMS : UI non professionnelle
+- Sanity/Contentful : Plus complexe, potentiellement payant
+- Decap CMS : Moins moderne que TinaCMS
+
+---
+
+### 2026-01-14 | Navigation : 5 éléments avec WhatsApp FAB
+
+**Contexte** : Améliorer l'accès au support WhatsApp et réorganiser la navigation.
+
+**Décision** : Bottom bar 5 éléments avec bouton WhatsApp central surélevé (FAB).
+
+**Structure** :
+```
+Home | Explore | [WhatsApp FAB] | Services | Info
+```
+- FAB central : action directe wa.me, pas de page
+
+**Justification** :
+- WhatsApp est l'action support principale pour les guests
+- Pattern FAB central populaire (apps mobile)
+- Séparation claire Explore (externe) vs Services (interne)
+
+**Alternatives rejetées** :
+- 4 éléments + WhatsApp dans header : Moins visible
+- 6 éléments : Trop serré sur mobile
+
+---
+
+### 2026-01-14 | Structure contenu : Explore vs Services
+
+**Contexte** : Différencier clairement les recommandations externes (ville) des services internes (hôtel).
+
+**Décision** : Réorganiser /content en explore/ et services/.
+
+**Structure** :
+- `/content/explore/` : Restaurants, bars, activities, transport, laundry (spots en ville)
+- `/content/services/` : Amenities (pool, spa, gym) + Events (cooking class, happy hour)
+
+**Justification** :
+- Distinction claire pour l'owner dans le CMS
+- Meilleure UX guest : "que faire en ville" vs "ce qu'on offre"
+- Permet le pattern isHotelService pour cross-linking
+
+**Alternatives rejetées** :
+- Structure flat : Confusion entre interne/externe
+- Dossiers par type : Moins intuitif
+
+---
+
+### 2026-01-14 | isHotelService : Pattern cross-linking
+
+**Contexte** : Permettre d'afficher les services hôtel dans Explore avec badge spécial.
+
+**Décision** : Ajouter `isHotelService` et `linkedAmenityId` à tous les spots.
+
+**Comportement** :
+- `isHotelService: true` → Badge "⭐ Our Place", affiché en premier, lien vers /services#id
+- `isHotelService: false` → Comportement normal, lien vers page détail
+
+**Justification** :
+- Met en avant les services hôtel dans le contexte approprié
+- Navigation fluide entre Explore et Services
+- Pas de duplication de données
+
+**Alternatives rejetées** :
+- Duplication des données : Maintenance double
+- Séparation stricte : Moins de visibilité services hôtel
+
+---
+
+### 2026-01-14 | Events : Intégration dans Services
+
+**Contexte** : Simplifier la navigation et regrouper tout ce qui est interne à l'hôtel.
+
+**Décision** : Supprimer la page /events, intégrer les events dans /services.
+
+**Justification** :
+- Les events sont des services de l'hôtel (cooking class, happy hour)
+- Réduit le nombre de pages principales
+- Cohérent avec la bottom nav 5 éléments
+
+**Alternatives rejetées** :
+- Garder /events : Redondant avec Services
+- Events dans Home : Surcharge la page d'accueil
+
+---
+
+### 2026-01-14 | Bottom Bar : Icônes seules, hauteur réduite
+
+**Contexte** : Simplifier visuellement la bottom bar, les icônes étant suffisamment explicites.
+
+**Décision** :
+- Supprimer les labels texte sous les icônes
+- Changer icône Explore : `explore` → `menu_book` (brochure)
+- Changer icône Info : `menu_book` → `info_i`
+- Réduire la hauteur de 80px à 68px (-15%)
+
+**Justification** :
+- Icônes universelles reconnaissables sans texte
+- Gain d'espace vertical
+- Design plus épuré et moderne
+- `menu_book` représente mieux l'exploration du guide local
+- `info_i` est le symbole universel d'information
+
+**Alternatives rejetées** :
+- Garder les labels : Surcharge visuelle inutile
+- Icônes plus petites au lieu de réduire la bar : Moins accessible
+
+---
+
 ## Template pour nouvelles décisions
 
 ```markdown
