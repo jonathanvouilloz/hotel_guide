@@ -23,3 +23,5 @@ Thumbs.db
 *.log
 npm-debug.log*
 --typescript/
+
+node_modules
