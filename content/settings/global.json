@@ -1,7 +1,7 @@
 {
-  "hostelName": "Jon's House",
-  "logo": "/images/logo.png",
   "theme": "light",
+  "hostelName": "Jon's HouseTes",
+  "logo": "/images/logo.png",
   "branding": {
     "primaryColor": "#008080",
     "accentColor": "#FF6B6B"
